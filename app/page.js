@@ -1,4 +1,4 @@
-import Hero from '../components/Hero';
+import Hero from './components/Hero';
 import Link from 'next/link';
 
 export default function Home() {
@@ -73,7 +73,7 @@ export default function Home() {
                 <div className="container" style={styles.welcomeSection}>
                     <div style={styles.welcomeContent}>
                         <div style={styles.welcomeText}>
-                            <h2 style={{ fontSize: '3rem', marginBottom: '1rem', color: 'var(--color-primary)' }}>
+                            <h2 style={{ fontSize: '3rem', marginBottom: '1rem', color: 'var(--color-primary)', textShadow: '4px 4px 0px #000' }}>
                                 Hi! I'm Younis 👋
                             </h2>
                             <h3 style={{ fontSize: '1.5rem', marginBottom: '1.5rem', color: 'var(--color-secondary)', fontWeight: '500' }}>
