@@ -23,6 +23,7 @@ export default function StoryGenerator() {
     setStory(null);
 
     try {
+      console.log('📖 Sending story request...');
       const response = await fetch('/api/generate-story', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -33,7 +34,13 @@ export default function StoryGenerator() {
         }),
       });
 
+      console.log('📡 Response status:', response.status);
       const data = await response.json();
+      console.log('📦 Response data:', data);
+
+      if (!response.ok) {
+        throw new Error(data.error || `HTTP error! status: ${response.status}`);
+      }
 
       if (data.error) {
         setError(data.error);
@@ -46,8 +53,8 @@ export default function StoryGenerator() {
 
       setStory(data);
     } catch (err) {
-      setError('Something went wrong. Please try again!');
-      console.error(err);
+      console.error('❌ Story generation error:', err);
+      setError(err.message || 'Something went wrong. Please try again!');
     } finally {
       setGenerating(false);
     }
