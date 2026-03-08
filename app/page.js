@@ -106,6 +106,102 @@ export default function Home() {
 
             <Hero />
 
+            {/* 🎉 NEW: Fun Zone for Kids - Dropdown List */}
+            <section style={{ ...styles.section, background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)' }}>
+                <div className="container">
+                    <h2 style={{ ...styles.sectionTitle, color: 'white', textShadow: '2px 2px 4px rgba(0,0,0,0.3)' }}>
+                        🎈 Fun Zone for Younis's Friends!
+                    </h2>
+                    <div style={{ maxWidth: '600px', margin: '0 auto' }}>
+                        <details style={{
+                            background: 'white',
+                            borderRadius: '1rem',
+                            overflow: 'hidden',
+                            boxShadow: '0 10px 30px rgba(0,0,0,0.2)',
+                        }}>
+                            <summary style={{
+                                padding: '1.5rem',
+                                cursor: 'pointer',
+                                fontSize: '1.3rem',
+                                fontWeight: '600',
+                                color: '#667eea',
+                                listStyle: 'none',
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'space-between',
+                            }}>
+                                <span>🎮 Click for Fun Activities!</span>
+                                <span style={{ fontSize: '1.5rem' }}>▼</span>
+                            </summary>
+                            <div style={{ padding: '0' }}>
+                                <a
+                                    href="/friends/quiz"
+                                    style={{
+                                        display: 'block',
+                                        padding: '1.5rem',
+                                        textDecoration: 'none',
+                                        color: '#333',
+                                        borderBottom: '1px solid #f0f0f0',
+                                        transition: 'background 0.3s ease',
+                                    }}
+                                    onMouseEnter={(e) => e.target.style.background = '#f8f9ff'}
+                                    onMouseLeave={(e) => e.target.style.background = 'white'}
+                                >
+                                    <div style={{ fontSize: '2rem', marginBottom: '0.5rem' }}>🎯</div>
+                                    <div style={{ fontWeight: '600', fontSize: '1.1rem', marginBottom: '0.3rem' }}>
+                                        Fun Personality Quiz
+                                    </div>
+                                    <div style={{ fontSize: '0.9rem', color: '#666' }}>
+                                        Discover your personality type and get fun activity suggestions!
+                                    </div>
+                                </a>
+                                <a
+                                    href="/bedtime-stories"
+                                    style={{
+                                        display: 'block',
+                                        padding: '1.5rem',
+                                        textDecoration: 'none',
+                                        color: '#333',
+                                        borderBottom: '1px solid #f0f0f0',
+                                        transition: 'background 0.3s ease',
+                                    }}
+                                    onMouseEnter={(e) => e.target.style.background = '#f8f9ff'}
+                                    onMouseLeave={(e) => e.target.style.background = 'white'}
+                                >
+                                    <div style={{ fontSize: '2rem', marginBottom: '0.5rem' }}>📚</div>
+                                    <div style={{ fontWeight: '600', fontSize: '1.1rem', marginBottom: '0.3rem' }}>
+                                        Bedtime Stories Library
+                                    </div>
+                                    <div style={{ fontSize: '0.9rem', color: '#666' }}>
+                                        Read magical stories created for Younis's friends!
+                                    </div>
+                                </a>
+                                <a
+                                    href="/bedtime-stories/generate"
+                                    style={{
+                                        display: 'block',
+                                        padding: '1.5rem',
+                                        textDecoration: 'none',
+                                        color: '#333',
+                                        transition: 'background 0.3s ease',
+                                    }}
+                                    onMouseEnter={(e) => e.target.style.background = '#f8f9ff'}
+                                    onMouseLeave={(e) => e.target.style.background = 'white'}
+                                >
+                                    <div style={{ fontSize: '2rem', marginBottom: '0.5rem' }}>🌙</div>
+                                    <div style={{ fontWeight: '600', fontSize: '1.1rem', marginBottom: '0.3rem' }}>
+                                        AI Story Generator
+                                    </div>
+                                    <div style={{ fontSize: '0.9rem', color: '#666' }}>
+                                        Create a personalized bedtime story powered by AI!
+                                    </div>
+                                </a>
+                            </div>
+                        </details>
+                    </div>
+                </div>
+            </section>
+
             {/* Latest Videos Preview */}
             <section style={styles.section} className="container">
                 <h2 style={styles.sectionTitle}>Latest Adventures</h2>
