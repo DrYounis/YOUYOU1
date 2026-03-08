@@ -22,92 +22,45 @@ export default function StoryGenerator() {
     setStory(null);
 
     try {
-      const storyData = await generateStory(childName, parseInt(childAge), storyConcept);
+      const response = await fetch('/api/generate-story', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          childName,
+          childAge: parseInt(childAge),
+          storyConcept,
+        }),
+      });
 
+      const data = await response.json();
+
+      if (data.error) {
+        setError(data.error);
+        setGenerating(false);
+        return;
+      }
+
+      // Save to localStorage
       const savedStories = JSON.parse(localStorage.getItem('bedtimeStories') || '[]');
       const newStory = {
         id: Date.now().toString(),
         childName,
         childAge: parseInt(childAge),
         storyConcept,
-        title: storyData.title,
-        content: storyData.content,
+        title: data.title,
+        content: data.content,
         createdAt: new Date().toISOString(),
       };
       savedStories.unshift(newStory);
       localStorage.setItem('bedtimeStories', JSON.stringify(savedStories));
 
-      setStory(storyData);
+      setStory(data);
     } catch (err) {
       setError('Something went wrong. Please try again!');
       console.error(err);
     } finally {
       setGenerating(false);
     }
-  };
-
-  const generateStory = async (name, age, concept) => {
-    await new Promise(resolve => setTimeout(resolve, 1500));
-
-    const templates = [
-      {
-        title: `🌟 ${name}'s Magical ${concept.charAt(0).toUpperCase() + concept.slice(1)} Adventure`,
-        content: `Once upon a time, in a cozy little house just like yours, lived a brave ${age}-year-old adventurer named ${name}. 🏠✨
-
-One peaceful evening, ${name} discovered something magical about: ${concept}. It was like finding a secret treasure! 💎
-
-${name} closed their eyes and imagined floating on a fluffy cloud ☁️, drifting through a sky filled with twinkling stars ⭐. Each star whispered kind words: "You are brave, ${name}!" "You are kind!" "You are special!"
-
-As ${name} journeyed through this dreamy land, they met friendly characters who loved ${concept} just as much as they did! Together, they learned that the most magical thing in the whole universe was... believing in yourself! 🌈
-
-The moon smiled down and sang a gentle lullaby 🌙🎵. ${name} felt warm, safe, and so very sleepy...
-
-And as ${name}'s eyes grew heavy, they knew that tomorrow would bring new adventures. But for now, it was time to rest and dream sweet dreams. 💤
-
-Goodnight, brave ${name}. The end. 🌟`
-      },
-      {
-        title: `✨ ${name} and the Wonderful World of ${concept.charAt(0).toUpperCase() + concept.slice(1)}`,
-        content: `In a land far, far away (but also right in your imagination!), there lived a wonderful child named ${name}. ${name} was ${age} years old and had the biggest, kindest heart in the whole world! 💖
-
-One day, ${name} decided to explore the amazing world of ${concept}. With a brave smile and curious eyes, ${name} set off on an adventure! 🗺️
-
-Along the way, ${name} met talking animals 🦊, friendly clouds ☁️, and even a giggling sun! ☀️ They all wanted to play and share stories about ${concept}.
-
-"You're so special, ${name}!" they all said. "The world is brighter because you're in it!"
-
-As the day turned to night, ${name} yawned a big, sleepy yawn. 🥱 The moon tucked ${name} in with a soft, silvery blanket of starlight. ✨
-
-"Sweet dreams, dear ${name}," whispered the wind. "Tomorrow holds even more magic!"
-
-And with a happy heart, ${name} drifted off to sleep, dreaming of tomorrow's adventures. 🌙💫
-
-The end. Goodnight! 😴`
-      },
-      {
-        title: `🌙 ${name}'s Dreamy Journey Through ${concept.charAt(0).toUpperCase() + concept.slice(1)}`,
-        content: `Close your eyes, little one, and listen to this magical tale... 🌟
-
-Once there was a wonderful child named ${name}, who was exactly ${age} years old. ${name} loved nothing more than learning about ${concept}! 📚
-
-One night, as ${name} was falling asleep, something amazing happened. The stars above began to twinkle in a special pattern, spelling out: "${name}, come on an adventure!" ⭐
-
-${name} climbed onto a soft, fluffy cloud and floated up, up, up into the night sky! ☁️ The cloud carried ${name} to a magical place where everything was about ${concept}!
-
-There were ${concept}-shaped flowers 🌸, ${concept}-colored butterflies 🦋, and even a wise old owl who taught ${name} all about ${concept} in the most fun way ever! 🦉
-
-"You have a gift, ${name}," said the owl. "You can imagine anything you want!"
-
-As the night grew deeper, ${name} felt sleepiness wrapping around like a warm, cozy blanket. 🛏️ The cloud gently floated back down, tucking ${name} safely into bed.
-
-"Goodnight, sweet ${name}," whispered the stars. "Dream big dreams!" 💫
-
-And ${name} slept peacefully until morning. The end. 🌅`
-      }
-    ];
-
-    const randomIndex = Math.floor(Math.random() * templates.length);
-    return templates[randomIndex];
   };
 
   const styles = {
@@ -231,7 +184,10 @@ And ${name} slept peacefully until morning. The end. 🌅`
       <div style={styles.card}>
         <div style={styles.header}>
           <h1 style={styles.title}>🌙 AI Bedtime Story Generator</h1>
-          <p style={styles.subtitle}>Create a magical personalized story for bedtime! ✨</p>
+          <p style={styles.subtitle}>Create a magical personalized story powered by AI! ✨</p>
+          <p style={{ fontSize: '0.85rem', color: '#888', marginTop: '0.5rem' }}>
+            🤖 Powered by AI • Each story is unique and generated just for you!
+          </p>
         </div>
 
         {!story ? (
@@ -328,7 +284,8 @@ And ${name} slept peacefully until morning. The end. 🌅`
         {generating && (
           <div style={styles.loading}>
             <div style={{ fontSize: '4rem' }}>🪄✨🌙</div>
-            <p style={styles.loadingText}>Creating a magical story for {childName}...</p>
+            <p style={styles.loadingText}>AI is creating a magical story for {childName}...</p>
+            <p style={{ fontSize: '1rem', color: '#888', marginTop: '0.5rem' }}>This takes about 5-10 seconds 🚀</p>
           </div>
         )}
       </div>
