@@ -19,7 +19,7 @@ export async function POST(request) {
     const { childName, childAge, storyConcept } = requestData;
 
     console.log('📖 Story request received:', { childName, childAge, storyConcept });
-    console.log('🔑 Groq API Key exists:', !!process.env.GROQ_API_KEY);
+    console.log('🔑 DeepSeek API Key exists:', !!process.env.DEEPSEEK_API_KEY);
 
     if (!childName || !childAge || !storyConcept) {
       return NextResponse.json(
@@ -28,8 +28,22 @@ export async function POST(request) {
       );
     }
 
-    // Always use template for now (more reliable)
-    console.log('✅ Using template story generator');
+    // Check if DeepSeek API key exists
+    const apiKey = process.env.DEEPSEEK_API_KEY;
+
+    if (apiKey) {
+      console.log('✅ Using DeepSeek AI');
+      try {
+        const storyData = await generateWithDeepSeek(childName, childAge, storyConcept, apiKey);
+        console.log('📦 AI Generated story:', { title: storyData.title, contentLength: storyData.content.length });
+        return NextResponse.json(storyData);
+      } catch (aiError) {
+        console.error('DeepSeek AI error, using fallback:', aiError.message);
+      }
+    }
+
+    // Fallback to template
+    console.log('✅ Using template story generator (fallback)');
     const storyData = generateTemplateStory(childName, childAge, storyConcept);
     console.log('📦 Generated story:', { title: storyData.title, contentLength: storyData.content.length });
     
@@ -45,6 +59,75 @@ export async function POST(request) {
       content: "Once upon a time, there was a wonderful child who loved adventures. One day, they discovered something magical that changed their life forever. And they lived happily ever after. 🌟"
     });
   }
+}
+
+// Generate story with DeepSeek AI
+async function generateWithDeepSeek(name, age, concept, apiKey) {
+  const prompt = `Write a magical bedtime story for a ${age}-year-old child named ${name}.
+
+Story concept/theme: ${concept}
+
+Requirements:
+- Make it warm, comforting, and age-appropriate for a ${age}-year-old
+- Include the child's name "${name}" as the main character (use it 3-5 times)
+- Keep it around 300-400 words (perfect for bedtime reading)
+- Include a gentle moral or positive message
+- Use simple, engaging language that a ${age}-year-old can understand
+- Add a peaceful, sleepy ending that helps with relaxation
+- Include some emojis to make it fun and visual (but not too many)
+- Create a catchy title
+
+Respond with ONLY a JSON object in this exact format:
+{"title": "Your Story Title Here", "content": "The full story text with paragraphs separated by \\n\\n"}`;
+
+  const response = await fetch('https://api.deepseek.com/chat/completions', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${apiKey}`,
+    },
+    body: JSON.stringify({
+      model: 'deepseek-chat',
+      messages: [
+        {
+          role: 'system',
+          content: 'You are a wonderful children\'s bedtime story writer. You create magical, comforting, and age-appropriate stories that help children feel safe, loved, and ready for sleep. You always include the child\'s name and make them the hero of their own adventure. Your stories have gentle morals and peaceful endings. Always respond with valid JSON.'
+        },
+        {
+          role: 'user',
+          content: prompt
+        }
+      ],
+      temperature: 0.7,
+      max_tokens: 1000,
+    }),
+  });
+
+  if (!response.ok) {
+    throw new Error(`DeepSeek API error: ${response.status} ${response.statusText}`);
+  }
+
+  const data = await response.json();
+  const aiContent = data.choices?.[0]?.message?.content || '';
+
+  // Parse the AI response to extract JSON
+  let storyData;
+  try {
+    const jsonMatch = aiContent.match(/\{[\s\S]*\}/);
+    if (jsonMatch) {
+      storyData = JSON.parse(jsonMatch[0]);
+    } else {
+      throw new Error('No JSON found');
+    }
+  } catch {
+    // If parsing fails, use the content as-is
+    storyData = {
+      title: `${name}'s Magical Adventure`,
+      content: aiContent
+    };
+  }
+
+  return storyData;
 }
 
 // Fallback template generator (when API is unavailable)
