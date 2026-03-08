@@ -1,15 +1,17 @@
 import { NextResponse } from 'next/server';
 
 export async function POST(request) {
-  console.log('🚀 API Route called');
+  console.log('🚀 [STORY API] Route called');
+  console.log('🔑 [STORY API] DEEPSEEK_API_KEY exists:', !!process.env.DEEPSEEK_API_KEY);
   
   try {
     let requestData;
     try {
-      requestData = await request.json();
-      console.log('📥 Request data:', requestData);
+      const text = await request.text();
+      console.log('📥 [STORY API] Raw request:', text.substring(0, 200));
+      requestData = JSON.parse(text);
     } catch (parseError) {
-      console.error('Failed to parse request:', parseError);
+      console.error('❌ [STORY API] Failed to parse request:', parseError.message);
       return NextResponse.json(
         { error: 'Invalid request data' },
         { status: 400 }
@@ -17,9 +19,7 @@ export async function POST(request) {
     }
 
     const { childName, childAge, storyConcept } = requestData;
-
-    console.log('📖 Story request received:', { childName, childAge, storyConcept });
-    console.log('🔑 DeepSeek API Key exists:', !!process.env.DEEPSEEK_API_KEY);
+    console.log('📖 [STORY API] Request:', { childName, childAge, storyConcept: storyConcept?.substring(0, 50) });
 
     if (!childName || !childAge || !storyConcept) {
       return NextResponse.json(
@@ -32,28 +32,34 @@ export async function POST(request) {
     const apiKey = process.env.DEEPSEEK_API_KEY;
 
     if (apiKey) {
-      console.log('✅ Using DeepSeek AI');
+      console.log('✅ [STORY API] Using DeepSeek AI');
       try {
         const storyData = await generateWithDeepSeek(childName, childAge, storyConcept, apiKey);
-        console.log('📦 AI Generated story:', { title: storyData.title, contentLength: storyData.content.length });
-        return NextResponse.json(storyData);
+        if (storyData && storyData.title && storyData.content) {
+          console.log('📦 [STORY API] AI Generated story:', { title: storyData.title, contentLength: storyData.content.length });
+          return NextResponse.json(storyData);
+        } else {
+          console.warn('⚠️ [STORY API] AI returned invalid data, using fallback');
+        }
       } catch (aiError) {
-        console.error('DeepSeek AI error, using fallback:', aiError.message);
+        console.error('❌ [STORY API] DeepSeek AI error:', aiError.message);
       }
+    } else {
+      console.log('ℹ️ [STORY API] No API key, using template');
     }
 
     // Fallback to template
-    console.log('✅ Using template story generator (fallback)');
+    console.log('✅ [STORY API] Using template story generator');
     const storyData = generateTemplateStory(childName, childAge, storyConcept);
-    console.log('📦 Generated story:', { title: storyData.title, contentLength: storyData.content.length });
+    console.log('📦 [STORY API] Template story:', { title: storyData.title, contentLength: storyData.content.length });
     
     return NextResponse.json(storyData);
 
   } catch (error) {
-    console.error('❌ Story generation error:', error);
-    console.error('Error details:', error.message, error.stack);
+    console.error('❌ [STORY API] Unexpected error:', error);
+    console.error('❌ [STORY API] Stack:', error.stack);
     
-    // Return a valid JSON response even on error
+    // Always return valid JSON even on error
     return NextResponse.json({
       title: "A Magical Bedtime Story",
       content: "Once upon a time, there was a wonderful child who loved adventures. One day, they discovered something magical that changed their life forever. And they lived happily ever after. 🌟"
