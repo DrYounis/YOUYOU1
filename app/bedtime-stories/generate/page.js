@@ -1,5 +1,6 @@
 'use client';
 import { useState } from 'react';
+import { supabase } from '@/lib/supabaseClient';
 
 export default function StoryGenerator() {
   const [childName, setChildName] = useState('');
@@ -11,7 +12,7 @@ export default function StoryGenerator() {
 
   const handleGenerate = async (e) => {
     e.preventDefault();
-    
+
     if (!childName || !childAge || !storyConcept) {
       setError('Please fill in all fields');
       return;
@@ -40,19 +41,8 @@ export default function StoryGenerator() {
         return;
       }
 
-      // Save to localStorage
-      const savedStories = JSON.parse(localStorage.getItem('bedtimeStories') || '[]');
-      const newStory = {
-        id: Date.now().toString(),
-        childName,
-        childAge: parseInt(childAge),
-        storyConcept,
-        title: data.title,
-        content: data.content,
-        createdAt: new Date().toISOString(),
-      };
-      savedStories.unshift(newStory);
-      localStorage.setItem('bedtimeStories', JSON.stringify(savedStories));
+      // Save to Supabase (with localStorage fallback)
+      await saveStory(childName, parseInt(childAge), storyConcept, data.title, data.content);
 
       setStory(data);
     } catch (err) {
@@ -61,6 +51,44 @@ export default function StoryGenerator() {
     } finally {
       setGenerating(false);
     }
+  };
+
+  const saveStory = async (childName, childAge, storyConcept, title, content) => {
+    // Try Supabase first
+    try {
+      const { error } = await supabase
+        .from('ai_stories')
+        .insert([{
+          child_name: childName,
+          child_age: childAge,
+          story_concept: storyConcept,
+          story_title: title,
+          story_content: content,
+          is_public: true,
+        }]);
+
+      if (!error) {
+        console.log('✅ Story saved to Supabase!');
+        return;
+      }
+    } catch (err) {
+      console.log('Supabase not available, using localStorage');
+    }
+
+    // Fallback to localStorage
+    const savedStories = JSON.parse(localStorage.getItem('bedtimeStories') || '[]');
+    const newStory = {
+      id: Date.now().toString(),
+      childName,
+      childAge,
+      storyConcept,
+      title,
+      content,
+      createdAt: new Date().toISOString(),
+    };
+    savedStories.unshift(newStory);
+    localStorage.setItem('bedtimeStories', JSON.stringify(savedStories));
+    console.log('✅ Story saved to localStorage!');
   };
 
   const styles = {

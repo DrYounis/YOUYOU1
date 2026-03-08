@@ -1,5 +1,6 @@
 'use client';
 import { useState, useEffect } from 'react';
+import { supabase } from '@/lib/supabaseClient';
 
 export default function StoriesLibrary() {
   const [stories, setStories] = useState([]);
@@ -7,13 +8,55 @@ export default function StoriesLibrary() {
   const [selectedStory, setSelectedStory] = useState(null);
 
   useEffect(() => {
+    fetchStories();
+  }, []);
+
+  const fetchStories = async () => {
+    setLoading(true);
+    
+    // Try Supabase first
+    try {
+      const { data, error } = await supabase
+        .from('ai_stories')
+        .select('*')
+        .eq('is_public', true)
+        .order('created_at', { ascending: false });
+
+      if (data && !error) {
+        // Transform Supabase data to match our format
+        const formattedStories = data.map(story => ({
+          id: story.id,
+          childName: story.child_name,
+          childAge: story.child_age,
+          storyConcept: story.story_concept,
+          title: story.story_title,
+          content: story.story_content,
+          createdAt: story.created_at,
+        }));
+        setStories(formattedStories);
+        setLoading(false);
+        return;
+      }
+    } catch (err) {
+      console.log('Supabase not available, using localStorage');
+    }
+
+    // Fallback to localStorage
     const savedStories = JSON.parse(localStorage.getItem('bedtimeStories') || '[]');
     setStories(savedStories);
     setLoading(false);
-  }, []);
+  };
 
-  const deleteStory = (id) => {
+  const deleteStory = async (id) => {
     if (confirm('Delete this story?')) {
+      // Try to delete from Supabase
+      try {
+        await supabase.from('ai_stories').delete().eq('id', id);
+      } catch (err) {
+        console.log('Could not delete from Supabase');
+      }
+
+      // Always delete from localStorage
       const updated = stories.filter(s => s.id !== id);
       localStorage.setItem('bedtimeStories', JSON.stringify(updated));
       setStories(updated);
