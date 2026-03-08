@@ -1,6 +1,7 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  output: 'export',
+  // Remove 'export' to enable API routes
+  // output: 'export',
   images: {
     unoptimized: true,
     domains: ['images.unsplash.com', 'i.ytimg.com'],
