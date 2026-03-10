@@ -18,6 +18,8 @@ export default function Home() {
             background: 'var(--color-surface)',
             borderRadius: 'var(--radius-lg)',
             margin: '2rem auto',
+            position: 'relative',
+            overflow: 'hidden',
         },
         welcomeContent: {
             display: 'flex',
@@ -67,38 +69,132 @@ export default function Home() {
 
     return (
         <div>
-            {/* New Welcome Section with Personal Photo */}
-            <section style={{ padding: '0 1.5rem' }}>
-                <div className="container" style={styles.welcomeSection}>
+            {/* ✨ MAGIC: Animated Background with Floating Emojis */}
+            <style jsx global>{`
+                @keyframes float {
+                    0%, 100% { transform: translateY(0) rotate(0deg); }
+                    50% { transform: translateY(-30px) rotate(10deg); }
+                }
+                @keyframes bounce {
+                    0%, 100% { transform: translateY(0); }
+                    50% { transform: translateY(-20px); }
+                }
+                @keyframes wiggle {
+                    0%, 100% { transform: rotate(-5deg); }
+                    50% { transform: rotate(5deg); }
+                }
+                @keyframes sparkle {
+                    0%, 100% { opacity: 1; transform: scale(1); }
+                    50% { opacity: 0.5; transform: scale(1.2); }
+                }
+                .floating-emoji {
+                    position: absolute;
+                    font-size: 3rem;
+                    opacity: 0.15;
+                    animation: float 4s ease infinite;
+                    pointer-events: none;
+                }
+                .magic-card:hover {
+                    transform: translateY(-15px) scale(1.05);
+                    box-shadow: 0 20px 60px rgba(102, 126, 234, 0.4);
+                }
+                .magic-card:hover .magic-icon {
+                    animation: bounce 0.5s ease infinite;
+                }
+                .welcome-btn {
+                    transition: all 0.3s ease;
+                }
+                .welcome-btn:hover {
+                    transform: translateY(-5px) scale(1.05);
+                    box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
+                }
+            `}</style>
+
+            {/* 🎨 Welcome Section - Now with Magic! */}
+            <section style={{ ...styles.welcomeSection, background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)' }}>
+                {/* Floating Background Emojis */}
+                <div className="floating-emoji" style={{ top: '10%', left: '5%', animationDelay: '0s' }}>🎈</div>
+                <div className="floating-emoji" style={{ top: '20%', right: '10%', animationDelay: '1s' }}>⭐</div>
+                <div className="floating-emoji" style={{ bottom: '15%', left: '15%', animationDelay: '2s' }}>🌟</div>
+                <div className="floating-emoji" style={{ bottom: '25%', right: '5%', animationDelay: '1.5s' }}>✨</div>
+                <div className="floating-emoji" style={{ top: '50%', left: '3%', animationDelay: '2.5s' }}>🎨</div>
+                <div className="floating-emoji" style={{ top: '35%', right: '8%', animationDelay: '3s' }}>🚀</div>
+
+                <div className="container" style={{ position: 'relative', zIndex: 1, padding: '3rem 1.5rem' }}>
                     <div style={styles.welcomeContent}>
                         <div style={styles.welcomeText}>
-                            <h2 style={{ fontSize: '3rem', marginBottom: '1rem', color: 'var(--color-primary)', textShadow: '4px 4px 0px #000' }}>
+                            <h2 style={{ 
+                                fontSize: '3.5rem', 
+                                marginBottom: '1rem', 
+                                color: 'white',
+                                textShadow: '4px 4px 0px rgba(0,0,0,0.3)',
+                                animation: 'wiggle 3s ease infinite'
+                            }}>
                                 Hi! I'm Younis 👋
                             </h2>
-                            <h3 style={{ fontSize: '1.5rem', marginBottom: '1.5rem', color: 'var(--color-secondary)', fontWeight: '500' }}>
-                                Hello to all my friends!
+                            <h3 style={{ 
+                                fontSize: '1.8rem', 
+                                marginBottom: '1.5rem', 
+                                color: 'rgba(255,255,255,0.95)',
+                                fontWeight: '600'
+                            }}>
+                                Hello to all my friends! 🎉
                             </h3>
-                            <p style={{ fontSize: '1.1rem', color: 'var(--color-text-muted)', marginBottom: '2rem' }}>
+                            <p style={{ 
+                                fontSize: '1.2rem', 
+                                color: 'rgba(255,255,255,0.95)', 
+                                marginBottom: '2rem',
+                                lineHeight: '1.8'
+                            }}>
                                 Welcome to my world of adventures. I'm so happy you're here.
                                 Look around, watch my videos, and maybe leave me a note on the Friends page!
                             </p>
                             <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
-                                <Link href="/friends" className="btn btn-primary">Leave a Message</Link>
-                                <Link href="/diaries" className="btn btn-outline">Read Diaries</Link>
-                                <Link href="/about" className="btn btn-outline">More About Me</Link>
-                            </div>
-                            <div style={{ marginTop: '1.5rem' }}>
-                                <Link href="/login" style={{ fontSize: '0.9rem', color: 'var(--color-text-muted)', textDecoration: 'none' }}>
-                                    🔐 Younis Login
+                                <Link 
+                                    href="/friends" 
+                                    className="welcome-btn"
+                                    style={{
+                                        display: 'inline-block',
+                                        padding: '1rem 2rem',
+                                        background: 'white',
+                                        color: '#667eea',
+                                        textDecoration: 'none',
+                                        borderRadius: '50px',
+                                        fontWeight: 'bold',
+                                        fontSize: '1.1rem',
+                                        boxShadow: '0 5px 20px rgba(0,0,0,0.2)',
+                                    }}
+                                >
+                                    💌 Leave a Message
+                                </Link>
+                                <Link 
+                                    href="/fun-zone" 
+                                    className="welcome-btn"
+                                    style={{
+                                        display: 'inline-block',
+                                        padding: '1rem 2rem',
+                                        background: 'rgba(255,255,255,0.2)',
+                                        color: 'white',
+                                        textDecoration: 'none',
+                                        borderRadius: '50px',
+                                        fontWeight: 'bold',
+                                        fontSize: '1.1rem',
+                                        backdropFilter: 'blur(10px)',
+                                        border: '2px solid rgba(255,255,255,0.3)',
+                                    }}
+                                >
+                                    🎮 Fun Zone
                                 </Link>
                             </div>
                         </div>
                         <div>
-                            {/* The new uploaded photo */}
                             <img
                                 src="/younis-welcome.jpg"
                                 alt="Younis saying Hi"
-                                style={styles.welcomeImage}
+                                style={{
+                                    ...styles.welcomeImage,
+                                    animation: 'float 4s ease infinite',
+                                }}
                             />
                         </div>
                     </div>
@@ -109,25 +205,6 @@ export default function Home() {
 
             {/* 🎉 NEW: Fun Zone for Kids - Creative Cards Design */}
             <section style={{ ...styles.section, background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)', position: 'relative', overflow: 'hidden' }}>
-                {/* Animated Background Elements */}
-                <style jsx global>{`
-                    @keyframes float {
-                        0%, 100% { transform: translateY(0) rotate(0deg); }
-                        50% { transform: translateY(-20px) rotate(5deg); }
-                    }
-                    @keyframes bounce {
-                        0%, 100% { transform: translateY(0); }
-                        50% { transform: translateY(-10px); }
-                    }
-                    .fun-card:hover {
-                        transform: translateY(-15px) scale(1.05);
-                        box-shadow: 0 20px 60px rgba(255,255,255,0.3);
-                    }
-                    .fun-card:hover .fun-icon {
-                        animation: bounce 0.5s ease infinite;
-                    }
-                `}</style>
-                
                 {/* Floating Background Shapes */}
                 <div style={{ position: 'absolute', top: '10%', left: '5%', fontSize: '4rem', opacity: 0.1, animation: 'float 3s ease infinite' }}>🎈</div>
                 <div style={{ position: 'absolute', top: '20%', right: '10%', fontSize: '5rem', opacity: 0.1, animation: 'float 4s ease infinite' }}>⭐</div>
