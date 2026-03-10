@@ -10,7 +10,8 @@ const DRAWING_Y_OFFSET = 40; // Less offset for larger drawing
 const FOOTER_HEIGHT = 70;
 
 // Website URL for branding on printed pages
-const WEBSITE_URL = 'younis.world';
+const WEBSITE_URL = 'younis.world'; // Custom domain
+const VERCAL_URL = 'youyou-1.vercel.app'; // Fallback URL
 
 const TEMPLATES = {
   animal: ['🐶 dog', '🐱 cat', '🐰 bunny', '🐘 elephant', '🦒 giraffe', '🦁 lion', '🐸 frog'],
