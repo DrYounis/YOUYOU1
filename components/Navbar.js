@@ -78,6 +78,8 @@ export default function Navbar() {
                 <div className="desktop-nav" style={navStyles.links}>
                     <Link href="/" style={navStyles.link}>Home</Link>
                     <Link href="/fun-zone" style={{...navStyles.link, color: '#667eea', fontWeight: '700'}}>🎉 Fun Zone</Link>
+                    <Link href="/citizens" style={navStyles.link}>🏆 Citizens</Link>
+                    <Link href="/secret-box" style={navStyles.link}>🔐 Secret</Link>
                     <Link href="/videos" style={navStyles.link}>Videos</Link>
                     <Link href="/gallery" style={navStyles.link}>Gallery</Link>
                     <Link href="/blog" style={navStyles.link}>Diaries</Link>

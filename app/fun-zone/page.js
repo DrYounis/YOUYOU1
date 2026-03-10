@@ -4,6 +4,22 @@ import Link from 'next/link';
 export default function FunZone() {
   const activities = [
     {
+      title: '🌟 مواطنو عالم يونس',
+      description: 'كن مواطناً مميزاً! احصل على وسام رقمي خاص بك وشارك رسوماتك!',
+      href: '/citizens',
+      color: 'linear-gradient(135deg, #fa709a 0%, #fee140 100%)',
+      icon: '🏆',
+      features: ['وسام رقمي', 'رسوماتك', 'لقب مميز', 'جائزة خاصة']
+    },
+    {
+      title: '🗝️ صندوق الأسرار',
+      description: 'محتوى سري لأصدقاء يونس المقربين! احصل على كلمة السر واكتشف المفاجآت!',
+      href: '/secret-box',
+      color: 'linear-gradient(135deg, #1a1a2e 0%, #16213e 100%)',
+      icon: '🔐',
+      features: ['محتوى حصري', 'كلمة سر', 'مفاجآت', 'فيديوهات سرية']
+    },
+    {
       title: '🎨 كتيب التلوين',
       description: 'صمم كتيب تلوين مخصص باسم طفلك! اختر الصفحات وحمله PDF جاهز للطباعة!',
       href: '/coloring-book',
