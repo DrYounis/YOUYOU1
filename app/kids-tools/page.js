@@ -435,6 +435,38 @@ export default function KidsTools() {
       `}</style>
 
       <div style={styles.wrapper}>
+        {/* Home Button */}
+        <div style={{ textAlign: 'center', marginBottom: '20px' }}>
+          <a
+            href="/"
+            style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '10px',
+              padding: '12px 24px',
+              background: 'rgba(255, 255, 255, 0.2)',
+              borderRadius: '50px',
+              color: 'white',
+              textDecoration: 'none',
+              fontWeight: 'bold',
+              fontSize: '16px',
+              backdropFilter: 'blur(10px)',
+              border: '2px solid rgba(255, 255, 255, 0.3)',
+              transition: 'all 0.3s ease',
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.background = 'rgba(255, 255, 255, 0.3)';
+              e.currentTarget.style.transform = 'translateY(-2px)';
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.background = 'rgba(255, 255, 255, 0.2)';
+              e.currentTarget.style.transform = 'translateY(0)';
+            }}
+          >
+            🏠 Back to Home
+          </a>
+        </div>
+
         <h1 style={styles.title}>🎨 Kids Coloring Paper Generator 🖍️</h1>
 
         <div style={styles.card}>
