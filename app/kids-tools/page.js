@@ -5,12 +5,12 @@ import * as templates from './components/drawingTemplates';
 
 const CANVAS_WIDTH = 600;
 const CANVAS_HEIGHT = 800;
-const TITLE_HEIGHT = 80;
-const DRAWING_Y_OFFSET = 120;
-const FOOTER_HEIGHT = 60;
+const TITLE_HEIGHT = 0; // Removed title to maximize drawing space
+const DRAWING_Y_OFFSET = 40; // Less offset for larger drawing
+const FOOTER_HEIGHT = 70;
 
 // Website URL for branding on printed pages
-const WEBSITE_URL = 'younis-adventures.vercel.app/kids-tools';
+const WEBSITE_URL = 'younis.world';
 
 const TEMPLATES = {
   animal: ['🐶 dog', '🐱 cat', '🐰 bunny', '🐘 elephant', '🦒 giraffe', '🦁 lion', '🐸 frog'],
@@ -95,12 +95,19 @@ export default function KidsTools() {
   const generateTemplateDrawing = (ctx, subject, thickness) => {
     const drawFunc = findDrawingFunction(subject);
     const x = 250;
-    const y = 300;
+    const y = 350; // Centered vertically
 
     if (typeof drawFunc === 'function') {
-      drawFunc(ctx, x, y, thickness);
+      // Make template drawings LARGER
+      ctx.save();
+      ctx.scale(1.3, 1.3); // 30% larger
+      drawFunc(ctx, x / 1.3, y / 1.3, thickness);
+      ctx.restore();
     } else if (drawFunc.main) {
-      drawFunc.main(ctx, 300, 200, thickness);
+      ctx.save();
+      ctx.scale(1.3, 1.3);
+      drawFunc.main(ctx, 300 / 1.3, 200 / 1.3, thickness);
+      ctx.restore();
       if (subject.toLowerCase().includes('animal')) {
         drawFunc.extra(ctx, x, y, thickness);
       }
@@ -122,13 +129,6 @@ export default function KidsTools() {
     ctx.strokeStyle = '#ccc';
     ctx.lineWidth = 1;
     ctx.strokeRect(20, 20, CANVAS_WIDTH - 40, CANVAS_HEIGHT - 40);
-
-    // Add title
-    ctx.fillStyle = '#333';
-    ctx.font = 'bold 24px "Comic Sans MS", Arial, sans-serif';
-    ctx.textAlign = 'center';
-    ctx.fillText(coloringTitle || 'My Coloring Page', CANVAS_WIDTH / 2, TITLE_HEIGHT);
-    ctx.textAlign = 'left';
 
     if (useAI) {
       await generateAIDrawing(ctx, thickness);
@@ -168,11 +168,12 @@ export default function KidsTools() {
   const generateAIDrawing = async (ctx, thickness) => {
     setIsGenerating(true);
     try {
+      // Improved prompt for LARGE, CLEAR coloring pages
       const prompt = encodeURIComponent(
-        `simple black and white line drawing coloring page for kids, ${drawingSubject}, thick outlines, white background, cartoon style, no shading, no colors, just black lines on white`
+        `LARGE simple black and white coloring page for kids, ${drawingSubject}, BIG bold outlines, very thick lines, white background, cartoon style, NO shading, NO colors, NO gray, just BLACK lines on WHITE, center the drawing, make it fill the entire page, high contrast, clear simple shapes`
       );
       
-      const aiUrl = `https://image.pollinations.ai/prompt/${prompt}?width=600&height=800&nologo=true&seed=${Math.floor(Math.random() * 1000)}`;
+      const aiUrl = `https://image.pollinations.ai/prompt/${prompt}?width=1024&height=1024&nologo=true&seed=${Math.floor(Math.random() * 1000)}`;
       
       const img = new Image();
       img.crossOrigin = 'anonymous';
@@ -181,10 +182,11 @@ export default function KidsTools() {
       await new Promise((resolve, reject) => {
         img.onload = resolve;
         img.onerror = reject;
-        setTimeout(resolve, 10000);
+        setTimeout(resolve, 15000); // Longer timeout for better quality
       });
       
-      ctx.drawImage(img, 50, DRAWING_Y_OFFSET, 500, CANVAS_HEIGHT - DRAWING_Y_OFFSET - 100);
+      // Draw AI image LARGER - fill most of the page
+      ctx.drawImage(img, 20, 40, CANVAS_WIDTH - 40, CANVAS_HEIGHT - 150);
     } catch (error) {
       generateTemplateDrawing(ctx, drawingSubject, thickness);
     } finally {
@@ -224,17 +226,17 @@ export default function KidsTools() {
 
     // Main text
     ctx.fillStyle = '#667eea';
-    ctx.font = 'bold 16px "Comic Sans MS", Arial, sans-serif';
+    ctx.font = 'bold 18px "Comic Sans MS", Arial, sans-serif';
     ctx.textAlign = 'center';
-    ctx.fillText('🎨 More FREE coloring pages at:', CANVAS_WIDTH / 2, CANVAS_HEIGHT - 35);
+    ctx.fillText('🎨 More FREE coloring pages at:', CANVAS_WIDTH / 2, CANVAS_HEIGHT - 45);
 
     // Website URL (large and prominent)
     ctx.fillStyle = '#4834d4';
-    ctx.font = 'bold 20px Arial, sans-serif';
-    ctx.fillText(WEBSITE_URL, CANVAS_WIDTH / 2, CANVAS_HEIGHT - 15);
+    ctx.font = 'bold 24px Arial, sans-serif';
+    ctx.fillText(WEBSITE_URL, CANVAS_WIDTH / 2, CANVAS_HEIGHT - 22);
 
     // Decorative elements
-    ctx.font = '14px Arial';
+    ctx.font = '16px Arial';
     ctx.fillStyle = '#764ba2';
     ctx.fillText('✨ AI draws ANYTHING! ✨', CANVAS_WIDTH / 2, CANVAS_HEIGHT - 5);
 
@@ -532,20 +534,7 @@ export default function KidsTools() {
                   onChange={(e) => setLineThickness(parseInt(e.target.value))}
                 />
                 <span style={styles.thicknessDisplay}>{lineThickness}px</span>
-              </div>
-
-              {/* Page Title */}
-              <div style={styles.controlGroup}>
-                <h3 style={styles.groupTitle}>Page Title</h3>
-                <input
-                  type="text"
-                  style={styles.input}
-                  value={coloringTitle}
-                  onChange={(e) => setColoringTitle(e.target.value)}
-                  placeholder="e.g., Younis's Coloring Book, Fun Animals..."
-                  maxLength={40}
-                />
-                <p style={{ fontSize: '0.85rem', color: '#666' }}>Appears at top of page</p>
+                <p style={{ fontSize: '0.85rem', color: '#666' }}>5-6px recommended for easy coloring</p>
               </div>
 
               {/* Coloring Options */}
