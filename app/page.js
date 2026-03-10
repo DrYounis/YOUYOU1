@@ -247,26 +247,109 @@ export default function Home() {
                 </div>
             </section>
 
-            {/* Latest Videos Preview */}
+            {/* Latest Videos Preview - LIVE with YouTube Embeds */}
             <section style={styles.section} className="container">
                 <h2 style={styles.sectionTitle}>Latest Adventures</h2>
-                <div style={styles.grid}>
-                    <Link href="/videos" style={{ textDecoration: 'none' }}>
-                        <div style={styles.card} className="hover-card">
-                            <img
-                                src="/latest-adventure.jpg"
-                                alt="Younis Adventures: New Episode"
-                                style={styles.cardImage}
+                <div style={{...styles.grid, gridTemplateColumns: 'repeat(auto-fit, minmax(350px, 1fr))'}}>
+                    {/* Featured Video - Live YouTube */}
+                    <div style={{...styles.card, overflow: 'hidden', border: '1px solid rgba(0,0,0,0.05)', boxShadow: 'var(--shadow-lg)'}}>
+                        <div style={{position: 'relative', paddingBottom: '56.25%', height: 0}}>
+                            <iframe
+                                src="https://www.youtube.com/embed/OGedo-eNsUg"
+                                title="Younis Adventures: New Episode"
+                                style={{position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', border: 0}}
+                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                allowFullScreen
                             />
-                            <div style={styles.cardContent}>
-                                <h3 style={styles.cardTitle}>Younis Adventures: New Episode</h3>
-                                <p style={{ color: 'var(--color-text-muted)' }}>Watch my latest adventure!</p>
+                        </div>
+                        <div style={styles.cardContent}>
+                            <h3 style={styles.cardTitle}>🎬 Younis Adventures: New Episode</h3>
+                            <p style={{color: 'var(--color-text-muted)', marginBottom: '1rem'}}>Watch my latest adventure!</p>
+                            <div style={{display: 'flex', gap: '0.5rem', flexWrap: 'wrap'}}>
+                                <span style={{
+                                    background: '#667eea',
+                                    color: 'white',
+                                    padding: '0.25rem 0.75rem',
+                                    borderRadius: '20px',
+                                    fontSize: '0.85rem',
+                                    fontWeight: '600'
+                                }}>
+                                    ▶️ New Episode
+                                </span>
+                                <span style={{
+                                    background: '#f0f0f0',
+                                    color: '#666',
+                                    padding: '0.25rem 0.75rem',
+                                    borderRadius: '20px',
+                                    fontSize: '0.85rem'
+                                }}>
+                                    📅 Dec 2025
+                                </span>
                             </div>
                         </div>
-                    </Link>
+                    </div>
+
+                    {/* Second Video - Live YouTube */}
+                    <div style={{...styles.card, overflow: 'hidden', border: '1px solid rgba(0,0,0,0.05)', boxShadow: 'var(--shadow-md)'}}>
+                        <div style={{position: 'relative', paddingBottom: '56.25%', height: 0}}>
+                            <iframe
+                                src="https://www.youtube.com/embed/qMOQKoFxQCE"
+                                title="Start Your Day Right"
+                                style={{position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', border: 0}}
+                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                allowFullScreen
+                            />
+                        </div>
+                        <div style={styles.cardContent}>
+                            <h3 style={styles.cardTitle}>☀️ Start Your Day Right</h3>
+                            <p style={{color: 'var(--color-text-muted)', marginBottom: '1rem'}}>Morning motivation with Younis!</p>
+                            <div style={{display: 'flex', gap: '0.5rem', flexWrap: 'wrap'}}>
+                                <span style={{
+                                    background: '#43e97b',
+                                    color: 'white',
+                                    padding: '0.25rem 0.75rem',
+                                    borderRadius: '20px',
+                                    fontSize: '0.85rem',
+                                    fontWeight: '600'
+                                }}>
+                                    ☀️ Morning
+                                </span>
+                                <span style={{
+                                    background: '#f0f0f0',
+                                    color: '#666',
+                                    padding: '0.25rem 0.75rem',
+                                    borderRadius: '20px',
+                                    fontSize: '0.85rem'
+                                }}>
+                                    📅 Dec 2025
+                                </span>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <div style={{ textAlign: 'center', marginTop: '3rem' }}>
-                    <Link href="/videos" className="btn btn-outline">View All Videos</Link>
+                <div style={{textAlign: 'center', marginTop: '3rem'}}>
+                    <Link href="/videos" style={{
+                        display: 'inline-block',
+                        padding: '1rem 2rem',
+                        background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                        color: 'white',
+                        textDecoration: 'none',
+                        borderRadius: '50px',
+                        fontWeight: 'bold',
+                        fontSize: '1.1rem',
+                        boxShadow: '0 5px 20px rgba(102, 126, 234, 0.4)',
+                        transition: 'all 0.3s ease',
+                    }}
+                    onMouseEnter={(e) => {
+                        e.currentTarget.style.transform = 'translateY(-5px)';
+                        e.currentTarget.style.boxShadow = '0 10px 30px rgba(102, 126, 234, 0.6)';
+                    }}
+                    onMouseLeave={(e) => {
+                        e.currentTarget.style.transform = 'translateY(0)';
+                        e.currentTarget.style.boxShadow = '0 5px 20px rgba(102, 126, 234, 0.4)';
+                    }}>
+                        🎬 Watch All Adventures →
+                    </Link>
                 </div>
             </section>
         </div>
