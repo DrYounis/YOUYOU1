@@ -7,6 +7,10 @@ const CANVAS_WIDTH = 600;
 const CANVAS_HEIGHT = 800;
 const TITLE_HEIGHT = 80;
 const DRAWING_Y_OFFSET = 120;
+const FOOTER_HEIGHT = 60;
+
+// Website URL for branding on printed pages
+const WEBSITE_URL = 'younis-adventures.vercel.app/kids-tools';
 
 const TEMPLATES = {
   animal: ['🐶 dog', '🐱 cat', '🐰 bunny', '🐘 elephant', '🦒 giraffe', '🦁 lion', '🐸 frog'],
@@ -57,6 +61,7 @@ export default function KidsTools() {
   const [isGenerating, setIsGenerating] = useState(false);
   const [coloringTitle, setColoringTitle] = useState("My Coloring Page");
   const [drawingsPerPage, setDrawingsPerPage] = useState(1);
+  const [addWebsiteFooter, setAddWebsiteFooter] = useState(true); // Show website footer for traffic
 
   useEffect(() => {
     generateDrawing();
@@ -147,12 +152,17 @@ export default function KidsTools() {
     // Add name line
     ctx.strokeStyle = '#999';
     ctx.beginPath();
-    ctx.moveTo(400, CANVAS_HEIGHT - 50);
-    ctx.lineTo(550, CANVAS_HEIGHT - 50);
+    ctx.moveTo(400, CANVAS_HEIGHT - 100);
+    ctx.lineTo(550, CANVAS_HEIGHT - 100);
     ctx.stroke();
     ctx.fillStyle = '#999';
     ctx.font = '14px Arial';
-    ctx.fillText('Your name:', 300, CANVAS_HEIGHT - 40);
+    ctx.fillText('Your name:', 300, CANVAS_HEIGHT - 90);
+
+    // Add website footer for viral traffic (if enabled)
+    if (addWebsiteFooter) {
+      drawWebsiteFooter(ctx);
+    }
   };
 
   const generateAIDrawing = async (ctx, thickness) => {
@@ -194,9 +204,41 @@ export default function KidsTools() {
       ctx.stroke();
 
       ctx.beginPath();
-      ctx.arc(i, CANVAS_HEIGHT - 30, 5, 0, Math.PI * 2);
+      ctx.arc(i, CANVAS_HEIGHT - 30 - FOOTER_HEIGHT, 5, 0, Math.PI * 2);
       ctx.stroke();
     }
+  };
+
+  const drawWebsiteFooter = (ctx) => {
+    // Footer background
+    ctx.fillStyle = '#f8f9fa';
+    ctx.fillRect(0, CANVAS_HEIGHT - FOOTER_HEIGHT, CANVAS_WIDTH, FOOTER_HEIGHT);
+    
+    // Top border
+    ctx.strokeStyle = '#667eea';
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    ctx.moveTo(0, CANVAS_HEIGHT - FOOTER_HEIGHT);
+    ctx.lineTo(CANVAS_WIDTH, CANVAS_HEIGHT - FOOTER_HEIGHT);
+    ctx.stroke();
+
+    // Main text
+    ctx.fillStyle = '#667eea';
+    ctx.font = 'bold 16px "Comic Sans MS", Arial, sans-serif';
+    ctx.textAlign = 'center';
+    ctx.fillText('🎨 More FREE coloring pages at:', CANVAS_WIDTH / 2, CANVAS_HEIGHT - 35);
+
+    // Website URL (large and prominent)
+    ctx.fillStyle = '#4834d4';
+    ctx.font = 'bold 20px Arial, sans-serif';
+    ctx.fillText(WEBSITE_URL, CANVAS_WIDTH / 2, CANVAS_HEIGHT - 15);
+
+    // Decorative elements
+    ctx.font = '14px Arial';
+    ctx.fillStyle = '#764ba2';
+    ctx.fillText('✨ AI draws ANYTHING! ✨', CANVAS_WIDTH / 2, CANVAS_HEIGHT - 5);
+
+    ctx.textAlign = 'left';
   };
 
   const randomGenerate = () => {
@@ -521,12 +563,24 @@ export default function KidsTools() {
                 <div style={styles.checkboxGroup}>
                   <input
                     type="checkbox"
+                    id="addWebsiteFooter"
+                    checked={addWebsiteFooter}
+                    onChange={(e) => setAddWebsiteFooter(e.target.checked)}
+                  />
+                  <label style={styles.checkboxLabel} htmlFor="addWebsiteFooter">🌐 Add website footer (share with others!)</label>
+                </div>
+                <div style={styles.checkboxGroup}>
+                  <input
+                    type="checkbox"
                     id="addInstructions"
                     checked={addInstructions}
                     onChange={(e) => setAddInstructions(e.target.checked)}
                   />
                   <label style={styles.checkboxLabel} htmlFor="addInstructions">📝 Show hints</label>
                 </div>
+                <p style={{ fontSize: '0.8rem', color: '#666', marginTop: '10px' }}>
+                  📢 Footer helps other parents find this free tool!
+                </p>
               </div>
 
               {/* Generate Button */}
