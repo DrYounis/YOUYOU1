@@ -366,6 +366,7 @@ export default function EidSongGenerator() {
       padding: '2rem',
       borderRadius: '20px',
       border: '2px dashed #f093fb',
+      fontFamily: '"Comic Sans MS", "Chalkboard SE", Arial, sans-serif',
     },
     actionButtons: {
       display: 'flex',
