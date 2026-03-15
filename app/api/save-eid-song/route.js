@@ -61,8 +61,14 @@ export async function POST(request) {
 
     if (error) {
       console.error('❌ [SAVE SONG API] Supabase error:', error);
+      console.error('❌ [SAVE SONG API] Error details:', {
+        message: error.message,
+        code: error.code,
+        details: error.details,
+        hint: error.hint
+      });
       return NextResponse.json(
-        { error: 'Failed to save song. Please try again.' },
+        { error: `Failed to save song: ${error.message}` },
         { status: 500 }
       );
     }
