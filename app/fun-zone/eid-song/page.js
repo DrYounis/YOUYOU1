@@ -1,5 +1,5 @@
 'use client';
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import Link from 'next/link';
 
 export default function EidSongGenerator() {
@@ -8,6 +8,11 @@ export default function EidSongGenerator() {
   const [isLoading, setIsLoading] = useState(false);
   const [song, setSong] = useState(null);
   const [error, setError] = useState(null);
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [isGeneratingAudio, setIsGeneratingAudio] = useState(false);
+  const [audioUrl, setAudioUrl] = useState(null);
+  const audioRef = useRef(null);
+  const synthRef = useRef(null);
 
   const generateSong = async (e) => {
     e.preventDefault();
@@ -52,6 +57,82 @@ export default function EidSongGenerator() {
       navigator.clipboard.writeText(text);
     }
   };
+
+  const generateAudio = async () => {
+    if (!song) return;
+    
+    setIsGeneratingAudio(true);
+    
+    try {
+      // Use browser's built-in Web Speech API (free, no API key needed)
+      if ('speechSynthesis' in window) {
+        synthRef.current = window.speechSynthesis;
+        
+        // Cancel any ongoing speech
+        synthRef.current.cancel();
+        
+        // Create utterance with the song lyrics
+        const utterance = new SpeechSynthesisUtterance(song.lyrics);
+        
+        // Set language
+        utterance.lang = language === 'ar' ? 'ar-SA' : 'en-US';
+        
+        // Adjust pitch and rate for a more musical feel
+        utterance.pitch = 1.1;
+        utterance.rate = 0.9;
+        utterance.volume = 1;
+        
+        // Try to find a good Arabic voice
+        const voices = synthRef.current.getVoices();
+        const arabicVoice = voices.find(voice => 
+          voice.lang.includes('ar') || voice.lang.includes('Arabic')
+        );
+        if (arabicVoice) {
+          utterance.voice = arabicVoice;
+        }
+        
+        utterance.onstart = () => setIsPlaying(true);
+        utterance.onend = () => {
+          setIsPlaying(false);
+        };
+        utterance.onerror = (event) => {
+          console.error('Speech synthesis error:', event);
+          setIsPlaying(false);
+        };
+        
+        synthRef.current.speak(utterance);
+        setIsPlaying(true);
+      } else {
+        setError('Text-to-speech is not supported in your browser');
+      }
+    } catch (err) {
+      console.error('Audio generation error:', err);
+      setError('Failed to generate audio');
+    } finally {
+      setIsGeneratingAudio(false);
+    }
+  };
+
+  const stopAudio = () => {
+    if (synthRef.current) {
+      synthRef.current.cancel();
+      setIsPlaying(false);
+    }
+  };
+
+  useEffect(() => {
+    // Load voices when component mounts
+    if ('speechSynthesis' in window) {
+      window.speechSynthesis.getVoices();
+    }
+    
+    // Cleanup on unmount
+    return () => {
+      if (synthRef.current) {
+        synthRef.current.cancel();
+      }
+    };
+  }, []);
 
   const styles = {
     container: {
@@ -308,7 +389,8 @@ export default function EidSongGenerator() {
           <p style={styles.infoText}>
             🎵 أدخل اسم طفلك وسنقوم بإنشاء أغنية عيد فطر خليجية احتفالية خاصة به!<br/>
             🌙 الأغنية ستكون باللهجة الخليجية ومرحة ومناسبة للأطفال<br/>
-            ✨ يمكنك طباعة الأغنية أو نسخها لمشاركتها
+            ✨ يمكنك طباعة الأغنية أو نسخها لمشاركتها<br/>
+            🔊 <strong>جديد!</strong> استمع للأغنية بصوت آلي مجاني!
           </p>
         </div>
 
@@ -383,6 +465,31 @@ export default function EidSongGenerator() {
               
               <div style={styles.actionButtons} className="no-print">
                 <button
+                  onClick={isPlaying ? stopAudio : generateAudio}
+                  disabled={isGeneratingAudio}
+                  style={{
+                    ...styles.actionButton,
+                    background: isPlaying 
+                      ? 'linear-gradient(135deg, #f5576c 0%, #d63031 100%)'
+                      : 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                    color: 'white',
+                    opacity: isGeneratingAudio ? 0.7 : 1,
+                    cursor: isGeneratingAudio ? 'not-allowed' : 'pointer',
+                  }}
+                  onMouseEnter={(e) => {
+                    if (!isGeneratingAudio) {
+                      e.currentTarget.style.transform = 'translateY(-2px)';
+                      e.currentTarget.style.boxShadow = '0 5px 15px rgba(102, 126, 234, 0.4)';
+                    }
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.transform = 'translateY(0)';
+                    e.currentTarget.style.boxShadow = 'none';
+                  }}
+                >
+                  {isGeneratingAudio ? '⏳ جاري...' : isPlaying ? '⏹️ إيقاف' : '🔊 تشغيل الأغنية'}
+                </button>
+                <button
                   onClick={handlePrint}
                   style={{...styles.actionButton, ...styles.printButton}}
                   onMouseEnter={(e) => {
@@ -414,6 +521,7 @@ export default function EidSongGenerator() {
                   onClick={() => {
                     setSong(null);
                     setChildName('');
+                    stopAudio();
                   }}
                   style={{...styles.actionButton, ...styles.newSongButton}}
                   onMouseEnter={(e) => {
