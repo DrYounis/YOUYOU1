@@ -64,70 +64,83 @@ export default function EidSongGenerator() {
     setIsGeneratingAudio(true);
     
     try {
-      // Use browser's built-in Web Speech API (free, no API key needed)
-      if ('speechSynthesis' in window) {
-        synthRef.current = window.speechSynthesis;
-        
-        // Cancel any ongoing speech
-        synthRef.current.cancel();
-        
-        // Create utterance with the song lyrics
-        const utterance = new SpeechSynthesisUtterance(song.lyrics);
-        
-        // Set language
-        utterance.lang = language === 'ar' ? 'ar-SA' : 'en-US';
-        
-        // Adjust pitch and rate for a more musical feel
-        utterance.pitch = 1.1;
-        utterance.rate = 0.9;
-        utterance.volume = 1;
-        
-        // Try to find a good Arabic voice
-        const voices = synthRef.current.getVoices();
-        const arabicVoice = voices.find(voice => 
-          voice.lang.includes('ar') || voice.lang.includes('Arabic')
-        );
-        if (arabicVoice) {
-          utterance.voice = arabicVoice;
-        }
-        
-        utterance.onstart = () => setIsPlaying(true);
-        utterance.onend = () => {
-          setIsPlaying(false);
-        };
-        utterance.onerror = (event) => {
-          console.error('Speech synthesis error:', event);
-          setIsPlaying(false);
-        };
-        
-        synthRef.current.speak(utterance);
-        setIsPlaying(true);
-      } else {
-        setError('Text-to-speech is not supported in your browser');
+      // Clean lyrics for TTS (remove emojis)
+      const cleanLyrics = song.lyrics
+        .replace(/[\u{1F600}-\u{1F64F}\u{1F300}-\u{1F5FF}\u{1F680}-\u{1F6FF}\u{1F1E0}-\u{1F1FF}]/gu, '')
+        .replace(/🎵/g, '')
+        .replace(/✨/g, '')
+        .replace(/🌙/g, '')
+        .replace(/🍬/g, '')
+        .replace(/🏠/g, '')
+        .replace(/💰/g, '')
+        .replace(/🎉/g, '');
+      
+      // Split into lines and filter empty ones
+      const lines = cleanLyrics.split('\n').filter(line => line.trim().length > 0 && line.trim().length < 200);
+      
+      if (audioRef.current) {
+        audioRef.current.pause();
+        audioRef.current = null;
       }
+      
+      // Play lines sequentially for better quality
+      for (const line of lines) {
+        if (!audioRef.current) break;
+        
+        const ttsUrl = `https://translate.google.com/translate_tts?ie=UTF-8&tl=ar&client=tw-ob&q=${encodeURIComponent(line.trim())}`;
+        audioRef.current = new Audio(ttsUrl);
+        
+        await new Promise((resolve) => {
+          audioRef.current.onended = resolve;
+          audioRef.current.onerror = resolve;
+          audioRef.current.play().catch(resolve);
+        });
+        
+        // Small pause between lines
+        await new Promise(resolve => setTimeout(resolve, 300));
+      }
+      
+      setIsPlaying(false);
     } catch (err) {
       console.error('Audio generation error:', err);
-      setError('Failed to generate audio');
+      // Fallback to browser TTS
+      if ('speechSynthesis' in window) {
+        synthRef.current = window.speechSynthesis;
+        synthRef.current.cancel();
+        const cleanLyrics = song.lyrics.replace(/[\u{1F600}-\u{1F64F}\u{1F300}-\u{1F5FF}\u{1F680}-\u{1F6FF}\u{1F1E0}-\u{1F1FF}]/gu, '');
+        const utterance = new SpeechSynthesisUtterance(cleanLyrics.substring(0, 500));
+        utterance.lang = 'ar-SA';
+        utterance.rate = 0.85;
+        const voices = synthRef.current.getVoices();
+        const arabicVoice = voices.find(v => v.lang.includes('ar'));
+        if (arabicVoice) utterance.voice = arabicVoice;
+        utterance.onstart = () => setIsPlaying(true);
+        utterance.onend = () => setIsPlaying(false);
+        synthRef.current.speak(utterance);
+      }
     } finally {
       setIsGeneratingAudio(false);
     }
   };
 
   const stopAudio = () => {
+    if (audioRef.current) {
+      audioRef.current.pause();
+      audioRef.current = null;
+    }
     if (synthRef.current) {
       synthRef.current.cancel();
-      setIsPlaying(false);
     }
+    setIsPlaying(false);
   };
 
   useEffect(() => {
-    // Load voices when component mounts
-    if ('speechSynthesis' in window) {
-      window.speechSynthesis.getVoices();
-    }
-    
     // Cleanup on unmount
     return () => {
+      if (audioRef.current) {
+        audioRef.current.pause();
+        audioRef.current = null;
+      }
       if (synthRef.current) {
         synthRef.current.cancel();
       }

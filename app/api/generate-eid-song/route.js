@@ -18,8 +18,8 @@ export async function POST(request) {
       );
     }
 
-    const { childName, language = 'ar' } = requestData;
-    console.log('🎵 [EID SONG API] Request:', { childName, language });
+    const { childName, language = 'ar', generateAudio = false } = requestData;
+    console.log('🎵 [EID SONG API] Request:', { childName, language, generateAudio });
 
     if (!childName) {
       return NextResponse.json(
@@ -37,6 +37,19 @@ export async function POST(request) {
         const songData = await generateWithDeepSeek(childName, apiKey, language);
         if (songData && songData.title && songData.lyrics) {
           console.log('📦 [EID SONG API] AI Generated song:', { title: songData.title, lyricsLength: songData.lyrics.length });
+          
+          // Generate audio if requested
+          if (generateAudio) {
+            try {
+              const audioBase64 = await generateArabicAudio(songData.lyrics);
+              songData.audioUrl = audioBase64;
+              console.log('🎵 [EID SONG API] Audio generated successfully');
+            } catch (audioError) {
+              console.warn('⚠️ [EID SONG API] Audio generation failed:', audioError.message);
+              songData.audioUrl = null;
+            }
+          }
+          
           return NextResponse.json(songData);
         } else {
           console.warn('⚠️ [EID SONG API] AI returned invalid data, using fallback');
@@ -153,6 +166,19 @@ Respond with ONLY a JSON object in this exact format:
   }
 
   return songData;
+}
+
+// Generate Arabic audio using free TTS service
+async function generateArabicAudio(lyrics) {
+  // Clean up lyrics - remove emojis for better TTS
+  const cleanLyrics = lyrics.replace(/[\u{1F600}-\u{1F64F}\u{1F300}-\u{1F5FF}\u{1F680}-\u{1F6FF}\u{1F1E0}-\u{1F1FF}]/gu, '');
+  
+  // Use Free TTS API (voicerss or similar free service)
+  // Alternative: Use Google Translate TTS (unofficial but free)
+  const ttsUrl = `https://translate.google.com/translate_tts?ie=UTF-8&tl=ar&client=tw-ob&q=${encodeURIComponent(cleanLyrics.substring(0, 200))}`;
+  
+  // Return the URL directly - client will handle playback
+  return ttsUrl;
 }
 
 // Fallback template generator (when API is unavailable)
