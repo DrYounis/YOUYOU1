@@ -291,9 +291,31 @@ export default function Home() {
                                 Create a personalized bedtime story powered by AI!
                             </p>
                         </a>
-                    </div>
 
-                    {/* More Fun Button */}
+                        {/* 📋 Exams Card */}
+                        <a
+                            href="https://younis.world/exams"
+                            className="fun-card"
+                            style={{
+                                background: 'linear-gradient(135deg, #ec4899 0%, #be185d 100%)',
+                                borderRadius: '1.5rem',
+                                padding: '2rem',
+                                textDecoration: 'none',
+                                color: 'white',
+                                transition: 'all 0.3s ease',
+                                boxShadow: '0 10px 30px rgba(0,0,0,0.3)',
+                                textAlign: 'center',
+                            }}
+                        >
+                            <div className="fun-icon" style={{ fontSize: '5rem', marginBottom: '1rem' }}>📋</div>
+                            <h3 style={{ fontSize: '1.5rem', marginBottom: '0.5rem', fontWeight: 'bold' }}>
+                                Exams
+                            </h3>
+                            <p style={{ fontSize: '1rem', opacity: 0.9, lineHeight: '1.5' }}>
+                                Take your exams here! Good luck! 🎯
+                            </p>
+                        </a>
+                    </div>                    {/* More Fun Button */}
                     <div style={{ textAlign: 'center', marginTop: '3rem' }}>
                         <a
                             href="/fun-zone"
