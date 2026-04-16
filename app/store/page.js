@@ -535,7 +535,7 @@ export default function StorePage() {
                                         </div>
                                         <div style={styles.bankRow}>
                                             <span style={styles.bankLabel}>البنك:</span>
-                                            <span style={styles.bankValue}>البنك الأهلي السعودي</span>
+                                            <span style={styles.bankValue}>بنك ساب (SAB)</span>
                                         </div>
                                         <div style={styles.bankRow}>
                                             <span style={styles.bankLabel}>المبلغ:</span>
@@ -666,7 +666,7 @@ export default function StorePage() {
                                     cursor: submitting ? 'not-allowed' : 'pointer',
                                 }}
                             >
-                                {submitting ? '⏳ جاري الإرسال...' : `🎉 تقديم الطلب - ${PRICE} {CURRENCY}`}
+                                {submitting ? '⏳ جاري الإرسال...' : `🎉 تقديم الطلب - ${PRICE} ${CURRENCY}`}
                             </button>
                         )}
                     </div>
