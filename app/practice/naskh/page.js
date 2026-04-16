@@ -44,28 +44,36 @@ export default function NaskhPracticePage() {
                         <Link 
                             key={lesson.id} 
                             href={`/practice/naskh/${lesson.id}`}
-                            style={{
-                                display: 'flex',
-                                alignItems: 'center',
-                                justifyContent: 'center',
-                                height: '80px',
-                                borderRadius: '1rem',
-                                background: '#ffffff',
-                                color: '#333',
-                                textDecoration: 'none',
-                                fontWeight: 'bold',
-                                fontSize: '2rem',
-                                border: '2px solid #e0e0e0',
-                                boxShadow: '0 2px 4px rgba(0,0,0,0.05)',
-                                transition: 'transform 0.1s, boxShadow 0.1s'
-                            }}
-                            onMouseOver={(e) => e.currentTarget.style.transform = 'translateY(-2px)'}
-                            onMouseOut={(e) => e.currentTarget.style.transform = 'translateY(0)'}
+                            className="naskh-letter-btn"
                         >
                             {lesson.letter}
                         </Link>
                     ))}
                 </div>
+
+                <style>{`
+                    .naskh-letter-btn {
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        height: 80px;
+                        border-radius: 1rem;
+                        background: #ffffff;
+                        color: #333;
+                        text-decoration: none;
+                        font-weight: bold;
+                        font-size: 2rem;
+                        border: 2px solid #e0e0e0;
+                        box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+                        transition: transform 0.15s, box-shadow 0.15s;
+                    }
+                    .naskh-letter-btn:hover {
+                        transform: translateY(-3px);
+                        box-shadow: 0 6px 12px rgba(0,0,0,0.1);
+                        border-color: #007AFF;
+                        color: #007AFF;
+                    }
+                `}</style>
             </div>
         </div>
     );
