@@ -292,9 +292,9 @@ export default function Home() {
                             </p>
                         </a>
 
-                        {/* 📋 Exams Card */}
+                        {/* 🧠 Study Hub Card */}
                         <a
-                            href="https://younis.world/exams"
+                            href="/exams"
                             className="fun-card"
                             style={{
                                 background: 'linear-gradient(135deg, #ec4899 0%, #be185d 100%)',
@@ -307,12 +307,12 @@ export default function Home() {
                                 textAlign: 'center',
                             }}
                         >
-                            <div className="fun-icon" style={{ fontSize: '5rem', marginBottom: '1rem' }}>📋</div>
+                            <div className="fun-icon" style={{ fontSize: '5rem', marginBottom: '1rem' }}>🧠</div>
                             <h3 style={{ fontSize: '1.5rem', marginBottom: '0.5rem', fontWeight: 'bold' }}>
-                                Exams
+                                Study Hub
                             </h3>
                             <p style={{ fontSize: '1rem', opacity: 0.9, lineHeight: '1.5' }}>
-                                Take your exams here! Good luck! 🎯
+                                Interactive English, Naskh, Dictation, and Exams! 🎒
                             </p>
                         </a>
 

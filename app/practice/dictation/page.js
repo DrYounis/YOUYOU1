@@ -1,6 +1,5 @@
 'use client';
-import { useState, useRef } from 'react';
-import Navbar from '../../../components/Navbar';
+import { useState, useRef, useEffect } from 'react';
 import DocumentTracer from '../../../components/dictation/DocumentTracer';
 
 export default function DictationPractice() {
@@ -16,50 +15,132 @@ export default function DictationPractice() {
     };
 
     return (
-        <div className="min-h-screen bg-[#F5F5F5] flex flex-col font-sans">
-            <Navbar />
-            
+        <div style={{
+            display: 'flex',
+            flexDirection: 'column',
+            minHeight: '100vh',
+            background: '#F5F5F5',
+            fontFamily: 'var(--font-pixel, "Inter", sans-serif)'
+        }}>            
             {/* Header Controls */}
-            <div className="pt-28 pb-4 px-6 bg-white shadow-sm flex flex-col md:flex-row items-center justify-between gap-4 border-b-4 border-[#000]">
+            <div style={{
+                padding: '2rem 1.5rem',
+                background: 'white',
+                boxShadow: '0 2px 4px rgba(0,0,0,0.05)',
+                display: 'flex',
+                flexDirection: 'row',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+                flexWrap: 'wrap',
+                gap: '1rem',
+                borderBottom: '4px solid #000'
+            }}>
                 <div>
-                    <h1 className="text-3xl font-black uppercase text-[#1D1D1D] tracking-wider">
+                    <h1 style={{
+                        fontSize: '2rem',
+                        fontWeight: '900',
+                        textTransform: 'uppercase',
+                        color: '#1D1D1D',
+                        letterSpacing: '1px',
+                        margin: 0
+                    }}>
                         📝 Dictation 21 Tracer
                     </h1>
-                    <p className="text-gray-500 font-bold">Apple Pencil Supported</p>
+                    <p style={{
+                        color: '#666',
+                        fontWeight: 'bold',
+                        margin: '0.5rem 0 0 0'
+                    }}>Apple Pencil Supported</p>
                 </div>
                 
-                <div className="flex flex-wrap items-center gap-4">
+                <div style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    flexWrap: 'wrap',
+                    gap: '1rem'
+                }}>
                     {/* Mode Toggle Element */}
-                    <div className="flex items-center bg-gray-200 rounded-full p-1 border-2 border-black shadow-[2px_2px_0_#000]">
+                    <div style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        background: '#e5e7eb',
+                        borderRadius: '50px',
+                        padding: '4px',
+                        border: '2px solid black',
+                        boxShadow: '2px 2px 0px #000',
+                        gap: '4px'
+                    }}>
                         <button 
                             onClick={() => setIsDrawingMode(false)}
-                            className={`px-4 py-2 rounded-full font-bold transition-all ${!isDrawingMode ? 'bg-white shadow-sm text-black' : 'text-gray-500'}`}
+                            style={{
+                                padding: '0.5rem 1rem',
+                                borderRadius: '50px',
+                                fontWeight: 'bold',
+                                border: 'none',
+                                cursor: 'pointer',
+                                transition: 'all 0.2s',
+                                background: !isDrawingMode ? 'white' : 'transparent',
+                                color: !isDrawingMode ? 'black' : '#6b7280',
+                                boxShadow: !isDrawingMode ? '0 1px 3px rgba(0,0,0,0.1)' : 'none'
+                            }}
                         >
                             ✋ Scroll Mode
                         </button>
                         <button 
                             onClick={() => setIsDrawingMode(true)}
-                            className={`px-4 py-2 rounded-full font-bold transition-all ${isDrawingMode ? 'bg-[#55FFFF] shadow-sm text-black' : 'text-gray-500'}`}
+                            style={{
+                                padding: '0.5rem 1rem',
+                                borderRadius: '50px',
+                                fontWeight: 'bold',
+                                border: 'none',
+                                cursor: 'pointer',
+                                transition: 'all 0.2s',
+                                background: isDrawingMode ? '#55FFFF' : 'transparent',
+                                color: isDrawingMode ? 'black' : '#6b7280',
+                                boxShadow: isDrawingMode ? '0 1px 3px rgba(0,0,0,0.1)' : 'none'
+                            }}
                         >
                             ✏️ Draw Mode
                         </button>
                     </div>
 
-                    <div className="w-px h-8 bg-gray-300 mx-2 hidden md:block"></div>
+                    <div style={{ width: '1px', height: '32px', background: '#d1d5db', margin: '0 0.5rem' }}></div>
 
                     <button 
                         onClick={handleUndo}
-                        className="btn btn-outline flex items-center gap-2"
-                        style={{ padding: '0.4rem 1.2rem', fontSize: '1.2rem' }}
-                        title="Undo Last Stroke"
+                        style={{
+                            padding: '0.5rem 1.2rem',
+                            fontSize: '1.1rem',
+                            fontWeight: 'bold',
+                            background: 'white',
+                            color: 'black',
+                            border: '2px solid black',
+                            borderRadius: '8px',
+                            cursor: 'pointer',
+                            display: 'flex',
+                            alignItems: 'center',
+                            gap: '0.5rem',
+                            boxShadow: '2px 2px 0px #000'
+                        }}
                     >
                         ↩️ Undo
                     </button>
                     <button 
                         onClick={handleClear}
-                        className="btn btn-outline flex items-center gap-2"
-                        style={{ padding: '0.4rem 1.2rem', fontSize: '1.2rem', background: '#FFDDDD' }}
-                        title="Erase Everything"
+                        style={{
+                            padding: '0.5rem 1.2rem',
+                            fontSize: '1.1rem',
+                            fontWeight: 'bold',
+                            background: '#FFDDDD',
+                            color: 'black',
+                            border: '2px solid black',
+                            borderRadius: '8px',
+                            cursor: 'pointer',
+                            display: 'flex',
+                            alignItems: 'center',
+                            gap: '0.5rem',
+                            boxShadow: '2px 2px 0px #000'
+                        }}
                     >
                         🗑️ Clear
                     </button>
@@ -67,13 +148,34 @@ export default function DictationPractice() {
             </div>
 
             {/* Document Viewer Area */}
-            <div className="flex-grow p-4 md:p-8 flex justify-center items-start overflow-hidden">
-                <main className="w-full max-w-4xl bg-white border-4 border-black shadow-[8px_8px_0_#000] relative" style={{ height: '80vh' }}>
+            <div style={{
+                flexGrow: 1,
+                padding: '2rem',
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'flex-start',
+                overflow: 'hidden'
+            }}>
+                {/* Fixed size window to match typical iPad/A4 aspect ratio */}
+                <main style={{
+                    width: '100%',
+                    maxWidth: '900px',
+                    height: '75vh',
+                    background: 'white',
+                    border: '4px solid black',
+                    boxShadow: '8px 8px 0px #000',
+                    position: 'relative'
+                }}>
                     <DocumentTracer ref={tracerRef} isDrawingMode={isDrawingMode}>
                         <iframe 
                             src="/assets/weekly revision 2nd (2).pdf#toolbar=0" 
-                            className="w-full h-full border-none"
                             title="Dictation 21 PDF"
+                            style={{
+                                width: '100%',
+                                height: '100%',
+                                border: 'none',
+                                background: 'white'
+                            }}
                         />
                     </DocumentTracer>
                 </main>
@@ -81,7 +183,19 @@ export default function DictationPractice() {
             
             {/* Warning when trying to draw in scroll mode */}
             {!isDrawingMode && (
-                <div className="fixed bottom-6 left-1/2 transform -translate-x-1/2 bg-black text-white px-6 py-3 rounded-xl font-bold opacity-80 pointer-events-none transition-opacity">
+                <div style={{
+                    position: 'fixed',
+                    bottom: '2rem',
+                    left: '50%',
+                    transform: 'translateX(-50%)',
+                    background: 'rgba(0,0,0,0.8)',
+                    color: 'white',
+                    padding: '0.8rem 1.5rem',
+                    borderRadius: '12px',
+                    fontWeight: 'bold',
+                    pointerEvents: 'none',
+                    zIndex: 1000
+                }}>
                     Switch to ✏️ Draw Mode to use your Apple Pencil!
                 </div>
             )}
