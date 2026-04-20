@@ -44,6 +44,44 @@ All legacy Vanilla JS applications (like the `index.html` phonics engine or `ara
 
 They are seamlessly served by Next.js as static routes. If you need to edit the old question bank arrays, edit them inside `public/legacy/index.html`. 
 
+---
+
+## 📚 Adding New Study Material
+
+When adding new study content (notes, exams, quizzes, or any learning resource) ensure you follow this standard process to maintain the codebase:
+
+### 1. Add to Header Navigation
+- Place your new page component in `app/` (Next.js) or HTML file in `public/` (Legacy).
+- Edit `components/Navbar.js`
+- Add a new `<Link href="/new-topic">New Topic</Link>` under the **Study & Practice** Dropdown.
+- Keep alphabetical or logical order.
+
+### 2. Link from Study Hub Page
+- Open the `/exams` page (or full `/study` hub after refactor).
+- Add a new card/link in the appropriate section:
+  - 📚 Exams → `/new-exam`
+  - 📝 Notes → `/new-notes`
+  - ✅ Quizzes → `/new-quiz`
+
+### 3. Cross-Link with Related Pages
+- If content relates to Naskh → add link on the Naskh page.
+- If content relates to English Notebook → add a link there.
+- If general study → strictly link from the Study Hub only.
+
+### 4. Update This List
+- Add the new page name and URL to the table below to track it.
+
+| Page Name | URL | Category |
+|-----------|-----|----------|
+| Home | `/` | Main |
+| Naskh | `/practice/naskh` | Study |
+| English Notebook | `/practice/english-notebook` | Study |
+| Exams | `/exams` | Study Hub |
+| Classic Main Apps | `/legacy/index.html` | Legacy Study |
+| (add yours) | `/your-page` | (your category) |
+
+---
+
 ## 🌐 Deployment (`younis.world`)
 
 This project is actively linked to **Vercel**. 
