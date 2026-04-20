@@ -66,6 +66,13 @@ export default function StudyHub() {
                         <h2 className="card-title">Science Fun</h2>
                         <p className="card-desc">Discover the Five Senses, Earth & Sun, and match the rocks!</p>
                     </Link>
+
+                    {/* Legacy Arabic */}
+                    <Link href="/legacy/arabic-writing.html" className="study-card arabic-bg">
+                        <div className="card-icon">✏️</div>
+                        <h2 className="card-title">Arabic Writing</h2>
+                        <p className="card-desc">Learn and practice writing Arabic letters and words.</p>
+                    </Link>
                 </div>
             </div>
 
@@ -148,6 +155,11 @@ export default function StudyHub() {
                     background: linear-gradient(135deg, #a855f7 0%, #7e22ce 100%);
                 }
                 .science-bg .card-desc { color: #f3e8ff; }
+
+                .arabic-bg {
+                    background: linear-gradient(135deg, #fbbf24 0%, #d97706 100%);
+                }
+                .arabic-bg .card-desc { color: #fffbeb; }
             `}</style>
         </div>
     );
