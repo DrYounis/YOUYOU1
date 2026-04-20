@@ -1,18 +1,19 @@
 'use client';
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef } from 'react';
 import DocumentTracer from '../../../components/dictation/DocumentTracer';
+import DictationTest from '../../../components/dictation/DictationTest';
+import MatchingGame from '../../../components/dictation/MatchingGame';
+import VoicePractice from '../../../components/dictation/VoicePractice';
 
-export default function DictationPractice() {
+export default function InteractiveDictation() {
+    const [activeTab, setActiveTab] = useState('spell'); // spell, match, voice, document
+    
+    // Document Tracer State
     const [isDrawingMode, setIsDrawingMode] = useState(false);
     const tracerRef = useRef(null);
 
-    const handleClear = () => {
-        if (tracerRef.current) tracerRef.current.clear();
-    };
-
-    const handleUndo = () => {
-        if (tracerRef.current) tracerRef.current.undo();
-    };
+    const handleClear = () => { if (tracerRef.current) tracerRef.current.clear(); };
+    const handleUndo = () => { if (tracerRef.current) tracerRef.current.undo(); };
 
     return (
         <div style={{
@@ -22,183 +23,150 @@ export default function DictationPractice() {
             background: '#F5F5F5',
             fontFamily: 'var(--font-pixel, "Inter", sans-serif)'
         }}>            
-            {/* Header Controls */}
+            {/* Header & Main Navigation */}
             <div style={{
                 padding: '2rem 1.5rem',
                 background: 'white',
                 boxShadow: '0 2px 4px rgba(0,0,0,0.05)',
-                display: 'flex',
-                flexDirection: 'row',
-                alignItems: 'center',
-                justifyContent: 'space-between',
-                flexWrap: 'wrap',
-                gap: '1rem',
                 borderBottom: '4px solid #000'
             }}>
-                <div>
-                    <h1 style={{
-                        fontSize: '2rem',
-                        fontWeight: '900',
-                        textTransform: 'uppercase',
-                        color: '#1D1D1D',
-                        letterSpacing: '1px',
-                        margin: 0
-                    }}>
-                        📝 Dictation 21 Tracer
-                    </h1>
-                    <p style={{
-                        color: '#666',
-                        fontWeight: 'bold',
-                        margin: '0.5rem 0 0 0'
-                    }}>Apple Pencil Supported</p>
-                </div>
-                
-                <div style={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    flexWrap: 'wrap',
-                    gap: '1rem'
-                }}>
-                    {/* Mode Toggle Element */}
-                    <div style={{
-                        display: 'flex',
-                        alignItems: 'center',
-                        background: '#e5e7eb',
-                        borderRadius: '50px',
-                        padding: '4px',
-                        border: '2px solid black',
-                        boxShadow: '2px 2px 0px #000',
-                        gap: '4px'
-                    }}>
-                        <button 
-                            onClick={() => setIsDrawingMode(false)}
-                            style={{
-                                padding: '0.5rem 1rem',
-                                borderRadius: '50px',
-                                fontWeight: 'bold',
-                                border: 'none',
-                                cursor: 'pointer',
-                                transition: 'all 0.2s',
-                                background: !isDrawingMode ? 'white' : 'transparent',
-                                color: !isDrawingMode ? 'black' : '#6b7280',
-                                boxShadow: !isDrawingMode ? '0 1px 3px rgba(0,0,0,0.1)' : 'none'
-                            }}
-                        >
-                            ✋ Scroll Mode
-                        </button>
-                        <button 
-                            onClick={() => setIsDrawingMode(true)}
-                            style={{
-                                padding: '0.5rem 1rem',
-                                borderRadius: '50px',
-                                fontWeight: 'bold',
-                                border: 'none',
-                                cursor: 'pointer',
-                                transition: 'all 0.2s',
-                                background: isDrawingMode ? '#55FFFF' : 'transparent',
-                                color: isDrawingMode ? 'black' : '#6b7280',
-                                boxShadow: isDrawingMode ? '0 1px 3px rgba(0,0,0,0.1)' : 'none'
-                            }}
-                        >
-                            ✏️ Draw Mode
-                        </button>
+                <div style={{ maxWidth: '1000px', margin: '0 auto' }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem', flexWrap: 'wrap', gap: '1rem' }}>
+                        <div>
+                            <h1 style={{ fontSize: '2.5rem', fontWeight: '900', textTransform: 'uppercase', color: '#1D1D1D', margin: 0 }}>
+                                ⭐️ Dictation Hub
+                            </h1>
+                            <p style={{ color: '#666', fontWeight: 'bold', margin: '0.5rem 0 0 0' }}>Learn, spell, and record!</p>
+                        </div>
                     </div>
 
-                    <div style={{ width: '1px', height: '32px', background: '#d1d5db', margin: '0 0.5rem' }}></div>
-
-                    <button 
-                        onClick={handleUndo}
-                        style={{
-                            padding: '0.5rem 1.2rem',
-                            fontSize: '1.1rem',
-                            fontWeight: 'bold',
-                            background: 'white',
-                            color: 'black',
-                            border: '2px solid black',
-                            borderRadius: '8px',
-                            cursor: 'pointer',
-                            display: 'flex',
-                            alignItems: 'center',
-                            gap: '0.5rem',
-                            boxShadow: '2px 2px 0px #000'
-                        }}
-                    >
-                        ↩️ Undo
-                    </button>
-                    <button 
-                        onClick={handleClear}
-                        style={{
-                            padding: '0.5rem 1.2rem',
-                            fontSize: '1.1rem',
-                            fontWeight: 'bold',
-                            background: '#FFDDDD',
-                            color: 'black',
-                            border: '2px solid black',
-                            borderRadius: '8px',
-                            cursor: 'pointer',
-                            display: 'flex',
-                            alignItems: 'center',
-                            gap: '0.5rem',
-                            boxShadow: '2px 2px 0px #000'
-                        }}
-                    >
-                        🗑️ Clear
-                    </button>
+                    {/* Tab Navigation */}
+                    <div style={{ display: 'flex', gap: '1rem', overflowX: 'auto', paddingBottom: '0.5rem' }}>
+                        <TabButton 
+                            active={activeTab === 'spell'} 
+                            onClick={() => setActiveTab('spell')}
+                            icon="⌨️" label="Listen & Spell" color="#3b82f6"
+                        />
+                        <TabButton 
+                            active={activeTab === 'match'} 
+                            onClick={() => setActiveTab('match')}
+                            icon="🧩" label="Match Picture" color="#8b5cf6"
+                        />
+                        <TabButton 
+                            active={activeTab === 'voice'} 
+                            onClick={() => setActiveTab('voice')}
+                            icon="🎙️" label="Voice Practice" color="#10b981"
+                        />
+                        <TabButton 
+                            active={activeTab === 'document'} 
+                            onClick={() => setActiveTab('document')}
+                            icon="📄" label="Print / Trace PDF" color="#f59e0b"
+                        />
+                    </div>
                 </div>
             </div>
 
-            {/* Document Viewer Area */}
+            {/* Main Content Area */}
             <div style={{
                 flexGrow: 1,
                 padding: '2rem',
                 display: 'flex',
                 justifyContent: 'center',
-                alignItems: 'flex-start',
-                overflow: 'hidden'
+                alignItems: 'flex-start'
             }}>
-                {/* Fixed size window to match typical iPad/A4 aspect ratio */}
                 <main style={{
                     width: '100%',
-                    maxWidth: '900px',
-                    height: '75vh',
+                    maxWidth: '1000px',
                     background: 'white',
                     border: '4px solid black',
                     boxShadow: '8px 8px 0px #000',
-                    position: 'relative'
+                    borderRadius: '16px',
+                    overflow: 'hidden'
                 }}>
-                    <DocumentTracer ref={tracerRef} isDrawingMode={isDrawingMode}>
-                        <iframe 
-                            src="/assets/weekly revision 2nd (2).pdf#toolbar=0" 
-                            title="Dictation 21 PDF"
-                            style={{
-                                width: '100%',
-                                height: '100%',
-                                border: 'none',
-                                background: 'white'
-                            }}
-                        />
-                    </DocumentTracer>
+                    
+                    {/* Render The Active Game Mode */}
+                    {activeTab === 'spell' && <DictationTest />}
+                    
+                    {activeTab === 'match' && <MatchingGame />}
+                    
+                    {activeTab === 'voice' && <VoicePractice />}
+
+                    {/* Legacy iPad PDF Tracer (Hidden inside a tab now!) */}
+                    <div style={{ display: activeTab === 'document' ? 'block' : 'none', height: '75vh', position: 'relative' }}>
+                        
+                        {/* PDF Toolbar specific to Document view */}
+                        <div style={{ position: 'absolute', top: 10, right: 10, zIndex: 100, display: 'flex', gap: '0.5rem' }}>
+                            <div style={{
+                                display: 'flex', background: '#e5e7eb', borderRadius: '50px', padding: '4px', border: '2px solid black'
+                            }}>
+                                <button onClick={() => setIsDrawingMode(false)} style={getModeStyle(!isDrawingMode)}>✋ Scroll</button>
+                                <button onClick={() => setIsDrawingMode(true)} style={getModeStyle(isDrawingMode, '#55FFFF')}>✏️ Draw</button>
+                            </div>
+                            <button onClick={handleUndo} style={getToolStyle('white')}>↩️</button>
+                            <button onClick={handleClear} style={getToolStyle('#FFDDDD')}>🗑️</button>
+                        </div>
+
+                        <DocumentTracer ref={tracerRef} isDrawingMode={isDrawingMode}>
+                            <iframe 
+                                src="/assets/weekly revision 2nd (2).pdf#toolbar=0" 
+                                title="Dictation 21 PDF"
+                                style={{ width: '100%', height: '100%', border: 'none', background: 'white' }}
+                            />
+                        </DocumentTracer>
+
+                        {!isDrawingMode && (
+                            <div style={{
+                                position: 'absolute', bottom: '2rem', left: '50%', transform: 'translateX(-50%)',
+                                background: 'rgba(0,0,0,0.8)', color: 'white', padding: '0.8rem 1.5rem',
+                                borderRadius: '12px', fontWeight: 'bold', pointerEvents: 'none', zIndex: 1000
+                            }}>
+                                Switch to ✏️ Draw Mode to use your Apple Pencil!
+                            </div>
+                        )}
+                    </div>
+
                 </main>
             </div>
-            
-            {/* Warning when trying to draw in scroll mode */}
-            {!isDrawingMode && (
-                <div style={{
-                    position: 'fixed',
-                    bottom: '2rem',
-                    left: '50%',
-                    transform: 'translateX(-50%)',
-                    background: 'rgba(0,0,0,0.8)',
-                    color: 'white',
-                    padding: '0.8rem 1.5rem',
-                    borderRadius: '12px',
-                    fontWeight: 'bold',
-                    pointerEvents: 'none',
-                    zIndex: 1000
-                }}>
-                    Switch to ✏️ Draw Mode to use your Apple Pencil!
-                </div>
-            )}
         </div>
     );
+}
+
+// Helper Components & Styles
+function TabButton({ active, onClick, icon, label, color }) {
+    return (
+        <button onClick={onClick} style={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: '0.5rem',
+            padding: '1rem 1.5rem',
+            background: active ? color : '#f3f4f6',
+            color: active ? 'white' : '#6b7280',
+            border: active ? '3px solid #000' : '3px solid transparent',
+            borderRadius: '16px',
+            fontSize: '1.2rem',
+            fontWeight: 'bold',
+            cursor: 'pointer',
+            transition: 'all 0.2s',
+            boxShadow: active ? '0 4px 0 #000' : 'none',
+            transform: active ? 'translateY(-2px)' : 'none',
+            whiteSpace: 'nowrap'
+        }}>
+            <span style={{ fontSize: '1.5rem' }}>{icon}</span> {label}
+        </button>
+    );
+}
+
+function getModeStyle(isActive, color = 'white') {
+    return {
+        padding: '0.5rem 1rem', borderRadius: '50px', fontWeight: 'bold', border: 'none', cursor: 'pointer', transition: 'all 0.2s',
+        background: isActive ? color : 'transparent', color: isActive ? 'black' : '#6b7280',
+        boxShadow: isActive ? '0 1px 3px rgba(0,0,0,0.1)' : 'none'
+    };
+}
+
+function getToolStyle(background) {
+    return {
+        padding: '0.5rem', fontSize: '1.1rem', fontWeight: 'bold', background, color: 'black',
+        border: '2px solid black', borderRadius: '8px', cursor: 'pointer', boxShadow: '2px 2px 0px #000'
+    };
 }
