@@ -1,39 +1,58 @@
-# Younis Adventures 🌍
+# 🌍 Younis World (`younis.world`)
 
-Welcome to the **Younis Adventures** web application! Documenting my journey, one video and photo at a time.
+Welcome to the ultimate, unified source code for **Younis World**! 
+This repository (`YOUYOU1`) houses the entire modern Next.js learning ecosystem as well as the classic legacy interactive HTML games.
 
-## 🌟 Features
+## 📁 Repository Structure
 
-*   **Home, Videos, Gallery:** Explore multimedia content.
-*   **Store:** An e-commerce platform with Apple Pay and Bank Transfer processing, integrated with a Supabase database.
-*   **Diaries & Friends:** Social sharing pages.
-*   **Fun Zone & Kids Tools:** Interactive educational tools for children.
-*   **Naskh Calligraphy (خط النسخ):** A fully interactive, iPad & Apple Pencil compatible canvas for learning and tracing Arabic Naskh letters, complete with progress tracking!
-
-## 🚀 Tech Stack
-
-*   **Framework:** Next.js 14+ (App Router)
-*   **Styling:** Vanilla CSS & Inline styling
-*   **Database & Storage:** Supabase (PostgreSQL & Storage Buckets)
-*   **Deployment:** Vercel
-
-## ⚙️ Environment Variables Setup
-
-If you are running this project locally or deploying to a new Vercel instance, you must configure the following environment variables (found in Supabase under `Project Settings -> API`):
-
-```env
-NEXT_PUBLIC_SUPABASE_URL=https://your-project-url.supabase.co
-NEXT_PUBLIC_SUPABASE_ANON_KEY=your-anon-public-key
+```
+YOUYOU1/ (formerly younis-adventures)
+├── app/                  # Next.js 14 App Router (Modern Pages)
+│   ├── page.js           # The Main Home Page
+│   ├── practice/         # Interactive Trace & Write Tools
+│   └── ... 
+├── components/           # Reusable React components (Navbar, TracingPad)
+├── public/               # Static assets
+│   ├── assets/           # Unified images (.png, .jpg) & PDFs 
+│   └── legacy/           # Original interactive HTML apps (index.html, science-study, etc)
+└── README.md             # This documentation
 ```
 
-## 🖋️ Naskh Calligraphy Module
-Accessible via `/practice/naskh` or the main navigation header.
-- Uses `Pointer Events` API to calculate exact Apple Pencil pressure.
-- Saves drawing progress automatically to `localStorage`.
+---
 
-## 📜 Deployment
+## 🚀 Running Locally
 
-Any push to the `main` branch will automatically trigger a production deployment on Vercel. Ensure your environment variables are set in the Vercel dashboard beforehand structure.
+To spin up the modern development environment and view the site locally:
+
+1. **Install dependencies:**
+   ```bash
+   npm install
+   ```
+2. **Run the development server:**
+   ```bash
+   npm run dev
+   ```
+3. Open `http://localhost:3000` in your browser.
 
 ---
-© 2026 Younis Adventures. All rights reserved.
+
+## 🗃️ Legacy Awael Apps
+
+In April 2026, the original `YOUNIS STUDY` static repository was gracefully merged into this Next.js project. 
+All legacy Vanilla JS applications (like the `index.html` phonics engine or `arabic-writing.html`) have been moved into:
+**`public/legacy/`**
+
+They are seamlessly served by Next.js as static routes. If you need to edit the old question bank arrays, edit them inside `public/legacy/index.html`. 
+
+## 🌐 Deployment (`younis.world`)
+
+This project is actively linked to **Vercel**. 
+Any changes pushed to the `main` branch of this GitHub repository will automatically trigger a new Vercel build.
+
+```bash
+git add -A
+git commit -m "update: your message"
+git push
+```
+
+**Note:** Builds take approximately 1-3 minutes. If you encounter a `404 NOT_FOUND` immediately after pushing, wait 2 minutes and refresh!

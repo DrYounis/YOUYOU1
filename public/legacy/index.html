@@ -1,0 +1,1909 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>🌟 Awael Al-Mamlakah - Study Fun! 🌟</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-touch-callout: none;
+            -webkit-user-select: none;
+            user-select: none;
+        }
+
+        body {
+            font-family: 'Comic Sans MS', 'Chalkboard SE', cursive;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 15px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            padding: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+
+        .school-header {
+            text-align: center;
+            border-bottom: 3px solid #333;
+            padding-bottom: 10px;
+            margin-bottom: 15px;
+        }
+
+        .school-header h2 { color: #333; font-size: 1.2em; }
+        .school-header p { color: #666; font-size: 0.8em; }
+
+        h1 {
+            text-align: center;
+            color: #ff6b6b;
+            font-size: 1.8em;
+            margin: 10px 0;
+        }
+
+        .score-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #f0f0f0;
+            padding: 10px 15px;
+            border-radius: 10px;
+            margin: 10px 0;
+            font-size: 1.1em;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .menu-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .menu-card {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            border-radius: 15px;
+            padding: 25px 15px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            color: white;
+        }
+
+        .menu-card:hover { transform: scale(1.05); }
+        .menu-card.phonics { background: linear-gradient(135deg, #ffd93d, #ff6b6b); }
+        .menu-card.reading { background: linear-gradient(135deg, #4facfe, #00f2fe); }
+        .menu-card.vocab { background: linear-gradient(135deg, #43e97b, #38f9d7); }
+        .menu-card.listening { background: linear-gradient(135deg, #fa709a, #fee140); }
+        .menu-card.science { background: linear-gradient(135deg, #a78bfa, #7c3aed); }
+        .menu-card.writing { background: linear-gradient(135deg, #f59e0b, #d97706); }
+        .menu-card.exams { background: linear-gradient(135deg, #ec4899, #be185d); }
+        .menu-card.arabic { background: linear-gradient(135deg, #059669, #047857); }
+        .menu-card.jawad { background: linear-gradient(135deg, #f093fb, #f5576c); grid-column: span 2; }
+
+        .menu-card .icon { font-size: 3em; margin-bottom: 10px; }
+        .menu-card .title { font-size: 1.3em; font-weight: bold; }
+        .menu-card .subtitle { font-size: 0.9em; opacity: 0.9; margin-top: 5px; }
+
+        .section { display: none; }
+
+        .section-title {
+            font-size: 1.5em;
+            text-align: center;
+            margin: 15px 0;
+            text-decoration: underline;
+            font-style: italic;
+        }
+
+        .instruction {
+            text-align: center;
+            font-size: 1.1em;
+            color: #666;
+            margin-bottom: 15px;
+            font-style: italic;
+        }
+
+        .auto-play-bar {
+            text-align: center;
+            margin: 15px 0;
+            padding: 10px;
+            background: #f0f0f0;
+            border-radius: 10px;
+        }
+
+        .auto-play-btn {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            padding: 12px 25px;
+            font-size: 1.1em;
+            cursor: pointer;
+            margin: 5px;
+            font-family: inherit;
+        }
+
+        .auto-play-btn.active {
+            background: linear-gradient(135deg, #f87171, #ef4444);
+        }
+
+        .auto-play-status {
+            color: #666;
+            margin-top: 8px;
+            font-size: 1em;
+        }
+
+        /* PHONICS MATCHING */
+        .phonics-wrapper {
+            position: relative;
+            margin: 20px 0;
+        }
+
+        .phonics-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+        }
+
+        .phonics-box {
+            background: white;
+            border: 3px solid #ddd;
+            border-radius: 15px;
+            padding: 15px;
+            text-align: center;
+            min-height: 120px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .phonics-box.image-box {
+            font-size: 3.5em;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .phonics-box.image-box:hover { transform: scale(1.05); border-color: #667eea; }
+        .phonics-box.image-box.selected { border-color: #667eea; background: #e0e7ff; }
+        .phonics-box.image-box.matched { border-color: #22c55e; background: #dcfce7; pointer-events: none; }
+
+        .phonics-box.word-box {
+            background: #ffd93d;
+            font-size: 1.3em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .phonics-box.word-box:hover { transform: scale(1.05); }
+        .phonics-box.word-box.selected { background: #667eea; color: white; border-color: #667eea; }
+        .phonics-box.word-box.matched { background: #4ade80; border-color: #22c55e; color: white; pointer-events: none; }
+
+        .drawing-canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 10;
+        }
+
+        /* READING */
+        .reading-item {
+            background: white;
+            border: 3px solid #333;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+
+        .reading-sentence {
+            font-size: 1.4em;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+
+        .reading-choices {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .reading-choice {
+            width: 130px;
+            height: 130px;
+            background: #ffd93d;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 4em;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: 4px solid transparent;
+        }
+
+        .reading-choice:hover { transform: scale(1.1); }
+        .reading-choice.correct { background: #4ade80; border-color: #22c55e; }
+        .reading-choice.wrong { background: #f87171; border-color: #ef4444; opacity: 0.5; }
+
+        /* VOCABULARY */
+        .vocab-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+        }
+
+        .vocab-item {
+            background: white;
+            border: 3px solid #ddd;
+            border-radius: 15px;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .vocab-image { font-size: 4em; margin-bottom: 15px; }
+
+        .vocab-words {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+        }
+
+        .vocab-word {
+            background: #f0f0f0;
+            padding: 12px 25px;
+            border-radius: 10px;
+            font-size: 1.3em;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: 3px solid transparent;
+        }
+
+        .vocab-word:hover { background: #667eea; color: white; }
+        .vocab-word.correct { background: #4ade80; border-color: #22c55e; color: white; }
+        .vocab-word.wrong { background: #f87171; border-color: #ef4444; color: white; opacity: 0.5; }
+
+        /* LISTENING */
+        .listening-item {
+            background: white;
+            border: 3px solid #333;
+            border-radius: 15px;
+            padding: 20px;
+            margin: 20px 0;
+            text-align: center;
+        }
+
+        .listening-word {
+            background: #ffd93d;
+            padding: 15px 30px;
+            border-radius: 50px;
+            font-size: 1.8em;
+            font-weight: bold;
+            display: inline-block;
+            margin-bottom: 20px;
+        }
+
+        .listening-choices {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .listening-choice {
+            width: 120px;
+            height: 120px;
+            background: #f0f0f0;
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 4em;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: 4px solid transparent;
+        }
+
+        .listening-choice:hover { transform: scale(1.1); }
+        .listening-choice.correct { background: #4ade80; border-color: #22c55e; }
+        .listening-choice.wrong { background: #f87171; border-color: #ef4444; opacity: 0.5; }
+
+        /* JAWAD BABY SECTION */
+        .jawad-title {
+            text-align: center;
+            font-size: 2em;
+            color: #f5576c;
+            margin: 15px 0;
+        }
+
+        .jawad-instruction {
+            text-align: center;
+            font-size: 1.5em;
+            color: #667eea;
+            margin-bottom: 25px;
+        }
+
+        .jawad-item {
+            background: linear-gradient(135deg, #ffecd2, #fcb69f);
+            border-radius: 20px;
+            padding: 25px;
+            margin: 20px 0;
+            text-align: center;
+        }
+
+        .jawad-emoji {
+            font-size: 6em;
+            margin: 15px 0;
+            animation: bounce 2s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-15px); }
+        }
+
+        .jawad-question {
+            font-size: 1.8em;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        .jawad-choices {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .jawad-choice {
+            width: 140px;
+            height: 140px;
+            background: white;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 5em;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: 5px solid transparent;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .jawad-choice:hover { transform: scale(1.15); }
+        .jawad-choice.correct { background: #4ade80; border-color: #22c55e; }
+        .jawad-choice.wrong { background: #f87171; border-color: #ef4444; opacity: 0.5; }
+
+        .btn {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            padding: 12px 25px;
+            font-size: 1.1em;
+            cursor: pointer;
+            margin: 10px;
+            font-family: inherit;
+        }
+
+        .back-btn { background: #6c757d; }
+        .nav { display: flex; justify-content: center; margin: 20px 0; flex-wrap: wrap; }
+        .hidden { display: none; }
+
+        .reward-popup {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            border-radius: 25px;
+            padding: 30px;
+            text-align: center;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+            z-index: 1000;
+        }
+
+        .confetti {
+            position: fixed;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            animation: fall 3s linear forwards;
+            z-index: 999;
+        }
+
+        @keyframes fall {
+            0% { transform: translateY(-100vh) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(100vh) rotate(720deg); opacity: 0; }
+        }
+
+        .teacher-name {
+            text-align: center;
+            margin-top: 20px;
+            font-style: italic;
+            color: #666;
+        }
+
+        /* ARABIC PRACTICE STYLES */
+        .arabic-phrase-card {
+            background: linear-gradient(135deg, #ecfdf5, #d1fae5);
+            border: 3px solid #059669;
+            border-radius: 20px;
+            padding: 25px;
+            margin: 20px 0;
+            text-align: center;
+        }
+
+        .arabic-phrase-text {
+            font-size: 2.5em;
+            font-weight: bold;
+            color: #059669;
+            direction: rtl;
+            font-family: 'Arial', 'Tahoma', sans-serif;
+            margin-bottom: 10px;
+            line-height: 1.6;
+        }
+
+        .arabic-phrase-meaning {
+            font-size: 1.1em;
+            color: #666;
+            margin-bottom: 15px;
+            font-style: italic;
+        }
+
+        .arabic-phrase-transliteration {
+            font-size: 1em;
+            color: #888;
+            margin-bottom: 15px;
+        }
+
+        .arabic-writing-canvas {
+            width: 100%;
+            height: 150px;
+            border: 3px dashed #059669;
+            border-radius: 15px;
+            background: #fff;
+            touch-action: none;
+            cursor: crosshair;
+            margin-top: 15px;
+        }
+
+        .arabic-tools {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 10px;
+            flex-wrap: wrap;
+        }
+
+        .arabic-tool-btn {
+            background: #059669;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            padding: 8px 16px;
+            font-size: 0.9em;
+            cursor: pointer;
+            font-family: inherit;
+            transition: all 0.3s;
+        }
+
+        .arabic-tool-btn:hover { background: #047857; }
+        .arabic-tool-btn.clear { background: #f87171; }
+        .arabic-tool-btn.check { background: #4ade80; }
+
+        .arabic-progress-bar {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            margin: 15px 0;
+        }
+
+        .arabic-progress-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: #ddd;
+            transition: all 0.3s;
+        }
+
+        .arabic-progress-dot.done { background: #059669; }
+        .arabic-progress-dot.current { background: #fbbf24; transform: scale(1.3); }
+
+        @media (max-width: 600px) {
+            .menu-grid { grid-template-columns: 1fr; }
+            .menu-card.jawad { grid-column: span 1; }
+            .phonics-grid { grid-template-columns: repeat(2, 1fr); }
+            .vocab-grid { grid-template-columns: 1fr; }
+            .jawad-animals { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="school-header">
+            <h2>🏫 Awael Al-Mamlakah International School</h2>
+            <p>Kingdom of Saudi Arabia | Ministry of Education | 2025-2026</p>
+        </div>
+
+        <h1>🌟 Study Fun! 🌟</h1>
+
+        <div class="score-bar">
+            <span>Score: <strong id="scoreDisplay">0</strong> / <strong id="totalDisplay">0</strong></span>
+            <span id="starsDisplay">⭐⭐⭐⭐⭐</span>
+            <a href="https://younis.world/exams" class="btn" style="background: linear-gradient(135deg, #ec4899, #be185d); padding: 8px 16px; font-size: 0.95em;">📋 Exams</a>
+        </div>
+
+        <!-- MAIN MENU -->
+        <div id="mainMenu">
+            <div class="menu-grid">
+                <div class="menu-card phonics" onclick="startSection('phonics')">
+                    <div class="icon">🔤</div>
+                    <div class="title">Phonics</div>
+                </div>
+                <div class="menu-card reading" onclick="startSection('reading')">
+                    <div class="icon">📖</div>
+                    <div class="title">Reading</div>
+                </div>
+                <div class="menu-card vocab" onclick="startSection('vocab')">
+                    <div class="icon">📝</div>
+                    <div class="title">Vocabulary</div>
+                </div>
+                <div class="menu-card listening" onclick="startSection('listening')">
+                    <div class="icon">👂</div>
+                    <div class="title">Listening</div>
+                </div>
+                <div class="menu-card science" onclick="startSection('science')">
+                    <div class="icon">🔬</div>
+                    <div class="title">Science</div>
+                </div>
+                <div class="menu-card writing" onclick="startSection('writing')">
+                    <div class="icon">✍️</div>
+                    <div class="title">Writing</div>
+                </div>
+                <a href="https://younis.world/exams" class="menu-card exams" style="text-decoration: none; display: block;">
+                    <div class="icon">📋</div>
+                    <div class="title">Exams</div>
+                    <div class="subtitle">Take your exams here! 🎯</div>
+                </a>
+                <div class="menu-card arabic" onclick="startSection('arabic')">
+                    <div class="icon">🕌</div>
+                    <div class="title">Arabic Practice</div>
+                    <div class="subtitle">Read & Write Islamic Phrases 📝</div>
+                </div>
+                <div class="menu-card jawad" onclick="startSection('jawad')">
+                    <div class="icon">👶</div>
+                    <div class="title">Jawad's Fun Zone!</div>
+                    <div class="subtitle">Colors, Animals & Shapes for Little Stars ⭐</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- PHONICS SECTION -->
+        <div id="phonicsSection" class="section">
+            <h2 class="section-title">Phonics</h2>
+            <p class="instruction">Tap a picture, then tap the matching word!</p>
+
+            <div class="auto-play-bar">
+                <button class="auto-play-btn" id="phonicsAutoBtn" onclick="toggleAutoPlay('phonics')">🔄 Auto Play - New Questions Every 30s!</button>
+                <p class="auto-play-status" id="phonicsAutoStatus"></p>
+            </div>
+
+            <div class="phonics-wrapper" id="phonicsWrapper">
+                <canvas id="phonicsCanvas" class="drawing-canvas"></canvas>
+                <div id="phonicsContent"></div>
+            </div>
+
+            <div class="nav">
+                <button class="btn back-btn" onclick="goHome()">🏠 Home</button>
+                <a href="https://younis.world/exams" class="btn" style="background: linear-gradient(135deg, #ec4899, #be185d);">📋 Exams</a>
+                <button class="btn" onclick="shufflePhonics()">🎲 New Questions</button>
+            </div>
+            <p class="teacher-name">T/Ebtsam Ali</p>
+        </div>
+
+        <!-- READING SECTION -->
+        <div id="readingSection" class="section">
+            <h2 class="section-title">Reading</h2>
+            <p class="instruction">Read the sentences and circle the correct picture</p>
+
+            <div class="auto-play-bar">
+                <button class="auto-play-btn" id="readingAutoBtn" onclick="toggleAutoPlay('reading')">🔄 Auto Play - New Questions Every 30s!</button>
+                <p class="auto-play-status" id="readingAutoStatus"></p>
+            </div>
+
+            <div id="readingContent"></div>
+
+            <div class="nav">
+                <button class="btn back-btn" onclick="goHome()">🏠 Home</button>
+                <a href="https://younis.world/exams" class="btn" style="background: linear-gradient(135deg, #ec4899, #be185d);">📋 Exams</a>
+                <button class="btn" onclick="shuffleReading()">🎲 New Questions</button>
+            </div>
+        </div>
+
+        <!-- VOCABULARY SECTION -->
+        <div id="vocabSection" class="section">
+            <h2 class="section-title">Vocabulary</h2>
+            <p class="instruction">Look at the pictures circle the correct words</p>
+
+            <div class="auto-play-bar">
+                <button class="auto-play-btn" id="vocabAutoBtn" onclick="toggleAutoPlay('vocab')">🔄 Auto Play - New Questions Every 30s!</button>
+                <p class="auto-play-status" id="vocabAutoStatus"></p>
+            </div>
+
+            <div id="vocabContent"></div>
+
+            <div class="nav">
+                <button class="btn back-btn" onclick="goHome()">🏠 Home</button>
+                <a href="https://younis.world/exams" class="btn" style="background: linear-gradient(135deg, #ec4899, #be185d);">📋 Exams</a>
+                <button class="btn" onclick="shuffleVocab()">🎲 New Questions</button>
+            </div>
+        </div>
+
+        <!-- LISTENING SECTION -->
+        <div id="listeningSection" class="section">
+            <h2 class="section-title">Listening</h2>
+            <p class="instruction">Listen and circle the correct picture</p>
+
+            <div class="auto-play-bar">
+                <button class="auto-play-btn" id="listeningAutoBtn" onclick="toggleAutoPlay('listening')">🔄 Auto Play - New Questions Every 30s!</button>
+                <p class="auto-play-status" id="listeningAutoStatus"></p>
+            </div>
+
+            <div id="listeningContent"></div>
+
+            <div class="nav">
+                <button class="btn back-btn" onclick="goHome()">🏠 Home</button>
+                <a href="https://younis.world/exams" class="btn" style="background: linear-gradient(135deg, #ec4899, #be185d);">📋 Exams</a>
+                <button class="btn" onclick="shuffleListening()">🎲 New Questions</button>
+            </div>
+        </div>
+
+        <!-- SCIENCE SECTION -->
+        <div id="scienceSection" class="section">
+            <h2 class="section-title">🔬 Science Exam</h2>
+            <p class="instruction">Answer all the questions!</p>
+
+            <div class="auto-play-bar">
+                <button class="auto-play-btn" id="scienceAutoBtn" onclick="toggleAutoPlay('science')">🔄 Auto Play - New Questions Every 30s!</button>
+                <p class="auto-play-status" id="scienceAutoStatus"></p>
+            </div>
+
+            <div id="scienceContent"></div>
+
+            <div class="nav">
+                <button class="btn back-btn" onclick="goHome()">🏠 Home</button>
+                <a href="https://younis.world/exams" class="btn" style="background: linear-gradient(135deg, #ec4899, #be185d);">📋 Exams</a>
+                <button class="btn" onclick="shuffleScience()">🎲 New Questions</button>
+            </div>
+            <p class="teacher-name">T/ Ghuzail Alhaidan</p>
+        </div>
+
+        <!-- WRITING SECTION -->
+        <div id="writingSection" class="section">
+            <h2 class="section-title">✍️ Writing Exam</h2>
+            <p class="instruction">Use your Apple Pencil to write the answers!</p>
+            <div class="pen-instruction">✏️ Write your answers on the canvas below each question</div>
+
+            <div class="auto-play-bar">
+                <button class="auto-play-btn" id="writingAutoBtn" onclick="toggleAutoPlay('writing')">🔄 Auto Play - New Questions Every 30s!</button>
+                <p class="auto-play-status" id="writingAutoStatus"></p>
+            </div>
+
+            <div id="writingContent"></div>
+
+            <div class="nav">
+                <button class="btn back-btn" onclick="goHome()">🏠 Home</button>
+                <a href="https://younis.world/exams" class="btn" style="background: linear-gradient(135deg, #ec4899, #be185d);">📋 Exams</a>
+                <button class="btn" onclick="shuffleWriting()">🎲 New Questions</button>
+            </div>
+            <p class="teacher-name">T/ Ghuzail Alhaidan</p>
+        </div>
+
+        <!-- JAWAD'S FUN ZONE -->
+        <div id="jawadSection" class="section">
+            <h2 class="jawad-title">👶 Jawad's Fun Zone! 🎨</h2>
+            <p class="jawad-instruction">Tap the right answer! ⭐</p>
+
+            <div class="auto-play-bar">
+                <button class="auto-play-btn" id="jawadAutoBtn" onclick="toggleAutoPlay('jawad')">🔄 Auto Play - New Questions Every 20s!</button>
+                <p class="auto-play-status" id="jawadAutoStatus"></p>
+            </div>
+
+            <div id="jawadQuestions"></div>
+
+            <div class="nav">
+                <button class="btn back-btn" onclick="goHome()">🏠 Home</button>
+                <a href="https://younis.world/exams" class="btn" style="background: linear-gradient(135deg, #ec4899, #be185d);">📋 Exams</a>
+                <button class="btn" onclick="shuffleJawadQuestions()">🎲 New Questions Now!</button>
+            </div>
+        </div>
+
+        <!-- ARABIC PRACTICE SECTION -->
+        <div id="arabicSection" class="section">
+            <h2 class="section-title">🕌 Arabic Practice</h2>
+            <p class="instruction">Read the Arabic phrase, then write it with your Apple Pencil! ✍️</p>
+
+            <div class="auto-play-bar">
+                <button class="auto-play-btn" id="arabicAutoBtn" onclick="toggleAutoPlay('arabic')">🔄 Auto Play - New Phrases Every 30s!</button>
+                <p class="auto-play-status" id="arabicAutoStatus"></p>
+            </div>
+
+            <div id="arabicContent"></div>
+
+            <div class="nav">
+                <button class="btn back-btn" onclick="goHome()">🏠 Home</button>
+                <a href="https://younis.world/exams" class="btn" style="background: linear-gradient(135deg, #ec4899, #be185d);">📋 Exams</a>
+                <button class="btn" onclick="shuffleArabic()">🎲 New Phrases</button>
+            </div>
+            <p class="teacher-name">بسم الله الرحمن الرحيم</p>
+        </div>
+    </div>
+
+    <!-- Reward Popup -->
+    <div class="reward-popup" id="rewardPopup">
+        <h2 id="rewardTitle">🎉</h2>
+        <p id="rewardMsg"></p>
+        <button class="btn" onclick="closeReward()">Continue 🚀</button>
+    </div>
+
+    <script>
+        let score = 0;
+        let total = 0;
+        let selectedImageEl = null;
+        let phonicsMatched = 0;
+        const phonicsTotal = 6;
+        let autoPlayIntervals = {};
+
+        function updateScore() {
+            document.getElementById('scoreDisplay').textContent = score;
+            document.getElementById('totalDisplay').textContent = total;
+            const pct = total > 0 ? score / total : 0;
+            const stars = Math.min(5, Math.floor(pct * 5) + (pct > 0 ? 1 : 0));
+            document.getElementById('starsDisplay').textContent = '⭐'.repeat(stars) + '☆'.repeat(5 - stars);
+        }
+
+        function goHome() {
+            document.getElementById('mainMenu').style.display = 'block';
+            document.querySelectorAll('.section').forEach(s => s.style.display = 'none');
+            // Stop all auto plays
+            Object.keys(autoPlayIntervals).forEach(key => {
+                if (autoPlayIntervals[key]) {
+                    clearInterval(autoPlayIntervals[key]);
+                    autoPlayIntervals[key] = null;
+                }
+            });
+        }
+
+        function startSection(section) {
+            document.getElementById('mainMenu').style.display = 'none';
+            document.getElementById(section + 'Section').style.display = 'block';
+            
+            if (section === 'phonics') {
+                setTimeout(() => {
+                    initPhonicsCanvas();
+                    shufflePhonics();
+                }, 100);
+            } else if (section === 'reading') {
+                shuffleReading();
+            } else if (section === 'vocab') {
+                shuffleVocab();
+            } else if (section === 'listening') {
+                shuffleListening();
+            } else if (section === 'science') {
+                shuffleScience();
+            } else if (section === 'writing') {
+                shuffleWriting();
+            } else if (section === 'jawad') {
+                shuffleJawadQuestions();
+            } else if (section === 'arabic') {
+                shuffleArabic();
+            }
+        }
+
+        // ==================== PHONICS ====================
+        const phonicsPairs = [
+            { image: '🐑', word: 'sheep' },
+            { image: '🦵', word: 'knee' },
+            { image: '🐝', word: 'bee' },
+            { image: '🦷', word: 'teeth' },
+            { image: '🛞', word: 'wheel' },
+            { image: '🚙', word: 'Jeep' },
+            { image: '🐶', word: 'dog' },
+            { image: '🐱', word: 'cat' },
+            { image: '🌳', word: 'tree' },
+            { image: '🚗', word: 'car' },
+            { image: '🏠', word: 'house' },
+            { image: '🌞', word: 'sun' }
+        ];
+
+        function shufflePhonics() {
+            const wrapper = document.getElementById('phonicsWrapper');
+            const content = document.getElementById('phonicsContent');
+            
+            // Pick 6 random pairs
+            const selected = shuffleArray(phonicsPairs).slice(0, 6);
+            const images = selected.map(p => p.image);
+            const words = shuffleArray(selected.map(p => p.word));
+            
+            let html = '<canvas id="phonicsCanvas" class="drawing-canvas"></canvas>';
+            
+            // Images row
+            html += '<div class="phonics-grid">';
+            images.forEach((img, i) => {
+                html += `<div class="phonics-box image-box" data-match="${selected[i].word}" onclick="selectImage(this)">${img}</div>`;
+            });
+            html += '</div>';
+            
+            // Words row (scrambled)
+            html += '<div class="phonics-grid" style="margin-top: 15px;">';
+            words.forEach(word => {
+                html += `<div class="phonics-box word-box" data-word="${word}" onclick="selectWord(this)">${word}</div>`;
+            });
+            html += '</div>';
+            
+            content.innerHTML = html;
+            
+            // Reset state
+            selectedImageEl = null;
+            phonicsMatched = 0;
+            
+            setTimeout(initPhonicsCanvas, 50);
+        }
+
+        function initPhonicsCanvas() {
+            const canvas = document.getElementById('phonicsCanvas');
+            const wrapper = document.getElementById('phonicsWrapper');
+            if (canvas && wrapper) {
+                canvas.width = wrapper.offsetWidth;
+                canvas.height = wrapper.offsetHeight;
+            }
+        }
+
+        function selectImage(el) {
+            if (el.classList.contains('matched')) return;
+            document.querySelectorAll('.image-box').forEach(i => i.classList.remove('selected'));
+            el.classList.add('selected');
+            selectedImageEl = el;
+        }
+
+        function selectWord(el) {
+            if (el.classList.contains('matched') || !selectedImageEl) return;
+
+            const word = el.dataset.word.toLowerCase();
+            const imageMatch = selectedImageEl.dataset.match;
+
+            total++;
+
+            if (word === imageMatch) {
+                el.classList.add('matched');
+                selectedImageEl.classList.add('matched');
+                selectedImageEl.classList.remove('selected');
+                selectedImageEl = null;
+                score++;
+                phonicsMatched++;
+                updateScore();
+                drawLine(el);
+                showReward('✅', 'Perfect match! 🎉');
+                createConfetti();
+            } else {
+                showReward('❌', 'Not quite! Try again! 💪');
+                selectedImageEl.classList.remove('selected');
+                selectedImageEl = null;
+                updateScore();
+            }
+        }
+
+        function drawLine(wordEl) {
+            const canvas = document.getElementById('phonicsCanvas');
+            if (!canvas) return;
+            const ctx = canvas.getContext('2d');
+            const wrapper = document.getElementById('phonicsWrapper');
+            const wrapperRect = wrapper.getBoundingClientRect();
+
+            const matchedImage = document.querySelector('.image-box.matched:last-of-type');
+            if (!matchedImage) return;
+
+            const fromRect = matchedImage.getBoundingClientRect();
+            const toRect = wordEl.getBoundingClientRect();
+
+            const x1 = fromRect.left + fromRect.width / 2 - wrapperRect.left;
+            const y1 = fromRect.top + fromRect.height / 2 - wrapperRect.top;
+            const x2 = toRect.left + toRect.width / 2 - wrapperRect.left;
+            const y2 = toRect.top + toRect.height / 2 - wrapperRect.top;
+
+            ctx.strokeStyle = '#22c55e';
+            ctx.lineWidth = 4;
+            ctx.beginPath();
+            ctx.moveTo(x1, y1);
+            ctx.lineTo(x2, y2);
+            ctx.stroke();
+        }
+
+        // ==================== READING ====================
+        const readingQuestions = [
+            { sentence: "The bee is on the tree.", choices: [{ emoji: "🌳", correct: true }, { emoji: "🪵", correct: false }] },
+            { sentence: "The sheep see the jeep.", choices: [{ emoji: "🏃‍♂️", correct: false }, { emoji: "🐑", correct: true }] },
+            { sentence: "We see a tree.", choices: [{ emoji: "🌳", correct: true }, { emoji: "🐕", correct: false }] },
+            { sentence: "The van is red.", choices: [{ emoji: "⛵", correct: false }, { emoji: "🚐", correct: true }] },
+            { sentence: "The cat is on the mat.", choices: [{ emoji: "🐱", correct: true }, { emoji: "🐶", correct: false }] },
+            { sentence: "I see a big bus.", choices: [{ emoji: "🚌", correct: true }, { emoji: "🚲", correct: false }] },
+            { sentence: "The fish is in the water.", choices: [{ emoji: "🐟", correct: true }, { emoji: "🐦", correct: false }] },
+            { sentence: "The sun is bright.", choices: [{ emoji: "🌞", correct: true }, { emoji: "🌙", correct: false }] }
+        ];
+
+        function shuffleReading() {
+            const container = document.getElementById('readingContent');
+            const selected = shuffleArray(readingQuestions).slice(0, 4);
+            
+            let html = '';
+            selected.forEach(q => {
+                const shuffledChoices = shuffleArray(q.choices);
+                html += `
+                    <div class="reading-item">
+                        <div class="reading-sentence">${q.sentence}</div>
+                        <div class="reading-choices">
+                            ${shuffledChoices.map(c => `<div class="reading-choice" onclick="checkAnswer(this, ${c.correct}, 'reading')">${c.emoji}</div>`).join('')}
+                        </div>
+                    </div>
+                `;
+            });
+            container.innerHTML = html;
+        }
+
+        // ==================== VOCABULARY ====================
+        const vocabQuestions = [
+            { image: "🧗‍♂️", choices: [{ word: "Climb", correct: true }, { word: "Fly", correct: false }] },
+            { image: "🚗", choices: [{ word: "Drive", correct: true }, { word: "Slide", correct: false }] },
+            { image: "✈️", choices: [{ word: "Fly", correct: true }, { word: "Climb", correct: false }] },
+            { image: "🛝", choices: [{ word: "Slide", correct: true }, { word: "Fly", correct: false }] },
+            { image: "🏊‍♂️", choices: [{ word: "Float", correct: true }, { word: "Drive", correct: false }] },
+            { image: "🐕", choices: [{ word: "Run", correct: true }, { word: "Fly", correct: false }] },
+            { image: "🐦", choices: [{ word: "Fly", correct: true }, { word: "Swim", correct: false }] },
+            { image: "🐟", choices: [{ word: "Swim", correct: true }, { word: "Run", correct: false }] }
+        ];
+
+        function shuffleVocab() {
+            const container = document.getElementById('vocabContent');
+            const selected = shuffleArray(vocabQuestions).slice(0, 4);
+            
+            let html = '<div class="vocab-grid">';
+            selected.forEach(q => {
+                const shuffledChoices = shuffleArray(q.choices);
+                html += `
+                    <div class="vocab-item">
+                        <div class="vocab-image">${q.image}</div>
+                        <div class="vocab-words">
+                            ${shuffledChoices.map(c => `<div class="vocab-word" onclick="checkAnswer(this, ${c.correct}, 'vocab')">${c.word}</div>`).join('')}
+                        </div>
+                    </div>
+                `;
+            });
+            html += '</div>';
+            container.innerHTML = html;
+        }
+
+        // ==================== LISTENING ====================
+        const listeningQuestions = [
+            { word: "Bus", choices: [{ emoji: "🚌", correct: true }, { emoji: "🚲", correct: false }, { emoji: "⛵", correct: false }] },
+            { word: "Fly", choices: [{ emoji: "🛝", correct: false }, { emoji: "🚗", correct: false }, { emoji: "✈️", correct: true }] },
+            { word: "Vest", choices: [{ emoji: "🚐", correct: false }, { emoji: "🦺", correct: true }, { emoji: "👩‍⚕️", correct: false }] },
+            { word: "Tree", choices: [{ emoji: "🌳", correct: true }, { emoji: "🌸", correct: false }, { emoji: "🍎", correct: false }] },
+            { word: "Cat", choices: [{ emoji: "🐶", correct: false }, { emoji: "🐱", correct: true }, { emoji: "🐦", correct: false }] },
+            { word: "Sun", choices: [{ emoji: "🌙", correct: false }, { emoji: "⭐", correct: false }, { emoji: "🌞", correct: true }] }
+        ];
+
+        function shuffleListening() {
+            const container = document.getElementById('listeningContent');
+            const selected = shuffleArray(listeningQuestions).slice(0, 3);
+            
+            let html = '';
+            selected.forEach(q => {
+                const shuffledChoices = shuffleArray(q.choices);
+                html += `
+                    <div class="listening-item">
+                        <div class="listening-word">${q.word}</div>
+                        <div class="listening-choices">
+                            ${shuffledChoices.map(c => `<div class="listening-choice" onclick="checkAnswer(this, ${c.correct}, 'listening')">${c.emoji}</div>`).join('')}
+                        </div>
+                    </div>
+                `;
+            });
+            container.innerHTML = html;
+        }
+
+        // ==================== GENERIC ANSWER CHECKER ====================
+        function checkAnswer(el, isCorrect, section) {
+            const parent = el.parentElement;
+            if (parent.dataset.answered) return;
+            parent.dataset.answered = 'true';
+            total++;
+
+            const selector = section === 'reading' ? '.reading-choice' : section === 'vocab' ? '.vocab-word' : '.listening-choice';
+            parent.querySelectorAll(selector).forEach(c => c.style.pointerEvents = 'none');
+
+            if (isCorrect) {
+                el.classList.add('correct');
+                score++;
+                showReward('✅', 'Correct! Well done! 🎉');
+                createConfetti();
+            } else {
+                el.classList.add('wrong');
+                parent.querySelectorAll(selector).forEach(c => {
+                    if (c.onclick && c.onclick.toString().includes('true')) {
+                        c.classList.add('correct');
+                    }
+                });
+                showReward('❌', 'Wrong! Look at the correct answer 👆');
+            }
+            updateScore();
+        }
+
+        // ==================== SCIENCE ====================
+        const scienceQuestions = [
+            // Q1: The Sun is a ___ (star vs rock)
+            {
+                type: 'choice',
+                question: 'The Sun is a ___',
+                emoji: '☀️',
+                choices: [
+                    { emoji: '⭐', text: 'star', correct: true },
+                    { emoji: '🪨', text: 'rock', correct: false }
+                ]
+            },
+            // Q1: The Sun is ___ (hot vs cold)
+            {
+                type: 'choice',
+                question: 'The Sun is ___',
+                emoji: '☀️',
+                choices: [
+                    { emoji: '🔥', text: 'hot', correct: true },
+                    { emoji: '🧊', text: 'cold', correct: false }
+                ]
+            },
+            // Q1: The Sun gives us ___ (light vs dark)
+            {
+                type: 'choice',
+                question: 'The Sun gives us ___',
+                emoji: '☀️',
+                choices: [
+                    { emoji: '💡', text: 'light', correct: true },
+                    { emoji: '🌑', text: 'dark', correct: false }
+                ]
+            },
+            // Q3: Complete - We live on planet ___
+            {
+                type: 'fill',
+                question: 'We live on planet ___',
+                emoji: '🌍',
+                words: ['Earth', 'Granite', 'soil', 'Rock'],
+                answer: 'Earth'
+            },
+            // Q3: Complete - ___ is a hard rock
+            {
+                type: 'fill',
+                question: '___ is a hard rock',
+                emoji: '🪨',
+                words: ['Earth', 'Granite', 'soil', 'Rock'],
+                answer: 'Granite'
+            },
+            // Q3: Complete - We use ___ to grow our plants
+            {
+                type: 'fill',
+                question: 'We use ___ to grow our plants',
+                emoji: '🌱',
+                words: ['Earth', 'Granite', 'soil', 'Rock'],
+                answer: 'soil'
+            },
+            // Q3: Complete - The Earth is made of ___
+            {
+                type: 'fill',
+                question: 'The Earth is made of ___',
+                emoji: '🌍',
+                words: ['Earth', 'Granite', 'soil', 'Rock'],
+                answer: 'Rock'
+            },
+            // Q2: Day or Night - dark side
+            {
+                type: 'daynight',
+                question: 'Is this side Day or Night?',
+                emoji: '🌙',
+                side: 'dark',
+                answer: 'Night'
+            },
+            // Q2: Day or Night - bright side
+            {
+                type: 'daynight',
+                question: 'Is this side Day or Night?',
+                emoji: '☀️',
+                side: 'bright',
+                answer: 'day'
+            },
+            // Q3: What is found in soil?
+            {
+                type: 'soil',
+                question: 'Which of these is found in soil?',
+                items: [
+                    { emoji: '🐛', name: 'worm', correct: true },
+                    { emoji: '☀️', name: 'sun', correct: false },
+                    { emoji: '🪨', name: 'rock', correct: true },
+                    { emoji: '🦴', name: 'bone', correct: false }
+                ]
+            },
+            // Q4: Match rocks - Diamond
+            {
+                type: 'match',
+                question: 'Which one is Diamond?',
+                choices: [
+                    { emoji: '💎', text: 'Diamond', correct: true },
+                    { emoji: '🧱', text: 'Granite', correct: false },
+                    { emoji: '⬛', text: 'Slate', correct: false }
+                ]
+            },
+            // Q4: Match rocks - Granite
+            {
+                type: 'match',
+                question: 'Which one is Granite?',
+                choices: [
+                    { emoji: '💎', text: 'Diamond', correct: false },
+                    { emoji: '🪨', text: 'Granite', correct: true },
+                    { emoji: '⬛', text: 'Slate', correct: false }
+                ]
+            },
+            // Q4: Match rocks - Slate
+            {
+                type: 'match',
+                question: 'Which one is Slate?',
+                choices: [
+                    { emoji: '💎', text: 'Diamond', correct: false },
+                    { emoji: '🪨', text: 'Granite', correct: false },
+                    { emoji: '📄', text: 'Slate', correct: true }
+                ]
+            },
+            // 5 Senses - Eye
+            {
+                type: 'senses',
+                question: 'What do we use our EYES for?',
+                emoji: '👁️',
+                choices: [
+                    { text: 'see', correct: true },
+                    { text: 'hear', correct: false },
+                    { text: 'smell', correct: false },
+                    { text: 'taste', correct: false },
+                    { text: 'touch', correct: false }
+                ]
+            },
+            // 5 Senses - Nose
+            {
+                type: 'senses',
+                question: 'What do we use our NOSE for?',
+                emoji: '👃',
+                choices: [
+                    { text: 'see', correct: false },
+                    { text: 'hear', correct: false },
+                    { text: 'smell', correct: true },
+                    { text: 'taste', correct: false },
+                    { text: 'touch', correct: false }
+                ]
+            },
+            // 5 Senses - Ear
+            {
+                type: 'senses',
+                question: 'What do we use our EARS for?',
+                emoji: '👂',
+                choices: [
+                    { text: 'see', correct: false },
+                    { text: 'hear', correct: true },
+                    { text: 'smell', correct: false },
+                    { text: 'taste', correct: false },
+                    { text: 'touch', correct: false }
+                ]
+            },
+            // 5 Senses - Mouth
+            {
+                type: 'senses',
+                question: 'What do we use our MOUTH for?',
+                emoji: '👅',
+                choices: [
+                    { text: 'see', correct: false },
+                    { text: 'hear', correct: false },
+                    { text: 'smell', correct: false },
+                    { text: 'taste', correct: true },
+                    { text: 'touch', correct: false }
+                ]
+            },
+            // 5 Senses - Hand
+            {
+                type: 'senses',
+                question: 'What do we use our HANDS for?',
+                emoji: '✋',
+                choices: [
+                    { text: 'see', correct: false },
+                    { text: 'hear', correct: false },
+                    { text: 'smell', correct: false },
+                    { text: 'taste', correct: false },
+                    { text: 'touch', correct: true }
+                ]
+            },
+            // Trace rock
+            {
+                type: 'trace',
+                question: 'Spell the word:',
+                emoji: '🪨',
+                answer: 'rock',
+                letters: ['r', 'o', 'c', 'k']
+            },
+            // Earth coloring
+            {
+                type: 'color',
+                question: 'What planet do we live on?',
+                emoji: '🌍',
+                choices: [
+                    { emoji: '🌍', text: 'Earth', correct: true },
+                    { emoji: '🌙', text: 'Moon', correct: false },
+                    { emoji: '☀️', text: 'Sun', correct: false }
+                ]
+            }
+        ];
+
+        let currentScienceQuestions = [];
+
+        function shuffleScience() {
+            const container = document.getElementById('scienceContent');
+            const selected = shuffleArray(scienceQuestions).slice(0, 6);
+            currentScienceQuestions = selected;
+            
+            let html = '';
+            selected.forEach((q, idx) => {
+                html += `<div class="reading-item" style="margin: 20px 0;">`;
+                html += `<div class="reading-sentence">${q.question}</div>`;
+                
+                if (q.emoji && q.type !== 'senses' && q.type !== 'trace') {
+                    html += `<div style="font-size: 3em; text-align: center; margin: 10px 0;">${q.emoji}</div>`;
+                }
+                
+                if (q.type === 'choice' || q.type === 'match' || q.type === 'color') {
+                    html += `<div class="reading-choices">`;
+                    const shuffled = shuffleArray(q.choices);
+                    shuffled.forEach(c => {
+                        html += `<div class="reading-choice" onclick="checkAnswer(this, ${c.correct}, 'science')" style="width: auto; padding: 15px 25px; border-radius: 15px; font-size: 1.5em;">${c.emoji} ${c.text}</div>`;
+                    });
+                    html += `</div>`;
+                } else if (q.type === 'fill') {
+                    html += `<div class="reading-choices">`;
+                    const shuffled = shuffleArray(q.words);
+                    shuffled.forEach(w => {
+                        const isCorrect = w === q.answer;
+                        html += `<div class="reading-choice" onclick="checkAnswer(this, ${isCorrect}, 'science')" style="width: auto; padding: 15px 25px; border-radius: 15px; font-size: 1.3em;">${w}</div>`;
+                    });
+                    html += `</div>`;
+                } else if (q.type === 'daynight') {
+                    html += `<div class="reading-choices">`;
+                    html += `<div class="reading-choice" onclick="checkAnswer(this, ${q.answer === 'day'}, 'science')" style="width: auto; padding: 15px 25px; border-radius: 15px; font-size: 1.5em;">☀️ day</div>`;
+                    html += `<div class="reading-choice" onclick="checkAnswer(this, ${q.answer === 'Night'}, 'science')" style="width: auto; padding: 15px 25px; border-radius: 15px; font-size: 1.5em;">🌙 Night</div>`;
+                    html += `</div>`;
+                } else if (q.type === 'soil') {
+                    html += `<div class="reading-choices">`;
+                    const shuffled = shuffleArray(q.items);
+                    shuffled.forEach(item => {
+                        html += `<div class="reading-choice" onclick="checkAnswer(this, ${item.correct}, 'science')" style="font-size: 3em;">${item.emoji}</div>`;
+                    });
+                    html += `</div>`;
+                } else if (q.type === 'senses') {
+                    html += `<div style="font-size: 4em; text-align: center; margin: 10px 0;">${q.emoji}</div>`;
+                    html += `<div class="reading-choices">`;
+                    const shuffled = shuffleArray(q.choices);
+                    shuffled.forEach(c => {
+                        html += `<div class="reading-choice" onclick="checkAnswer(this, ${c.correct}, 'science')" style="width: auto; padding: 12px 20px; border-radius: 15px; font-size: 1.2em;">${c.text}</div>`;
+                    });
+                    html += `</div>`;
+                } else if (q.type === 'trace') {
+                    html += `<div style="font-size: 4em; text-align: center; margin: 10px 0; letter-spacing: 10px; color: #ddd;">${q.letters.join(' ')}</div>`;
+                    html += `<div style="text-align: center; margin: 15px 0;">`;
+                    html += `<div class="reading-choices">`;
+                    const wrongLetters = ['a', 'b', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'l', 'm', 'n', 'p', 'q', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'].filter(l => !q.letters.includes(l));
+                    const allLetters = shuffleArray([...q.letters, ...shuffleArray(wrongLetters).slice(0, 4)]);
+                    allLetters.forEach(l => {
+                        const isCorrect = q.letters.includes(l);
+                        html += `<div class="reading-choice" onclick="checkAnswer(this, ${isCorrect}, 'science')" style="width: 60px; height: 60px; font-size: 2em; border-radius: 10px;">${l}</div>`;
+                    });
+                    html += `</div></div>`;
+                }
+                
+                html += `</div>`;
+            });
+            
+            container.innerHTML = html;
+        }
+
+        // ==================== WRITING ====================
+        const writingQuestions = [
+            // Part a: Look at picture and write word
+            {
+                type: 'write',
+                part: 'a',
+                question: 'Look at the picture and write the correct word:',
+                emoji: '🐶',
+                answer: 'dog',
+                hint: 'd _ _'
+            },
+            {
+                type: 'write',
+                part: 'a',
+                question: 'Look at the picture and write the correct word:',
+                emoji: '🐝',
+                answer: 'bee',
+                hint: 'b _ _'
+            },
+            {
+                type: 'write',
+                part: 'a',
+                question: 'Look at the picture and write the correct word:',
+                emoji: '🚙',
+                answer: 'Jeep',
+                hint: 'J _ _ _'
+            },
+            {
+                type: 'write',
+                part: 'a',
+                question: 'Look at the picture and write the correct word:',
+                emoji: '🐑',
+                answer: 'sheep',
+                hint: 's _ _ _ _'
+            },
+            {
+                type: 'write',
+                part: 'a',
+                question: 'Look at the picture and write the correct word:',
+                emoji: '🌳',
+                answer: 'tree',
+                hint: 't _ _ _'
+            },
+            {
+                type: 'write',
+                part: 'a',
+                question: 'Look at the picture and write the correct word:',
+                emoji: '☀️',
+                answer: 'sun',
+                hint: 's _ _'
+            },
+            // Part b: Unscramble words
+            {
+                type: 'unscramble',
+                part: 'b',
+                question: 'Unscramble the words to make a correct sentence:',
+                emoji: '🦊',
+                words: ['is', 'The', 'hot', 'fox'],
+                answer: 'The fox is hot.'
+            },
+            {
+                type: 'unscramble',
+                part: 'b',
+                question: 'Unscramble the words to make a correct sentence:',
+                emoji: '🐝',
+                words: ['on', 'The', 'is', 'bee', 'tree', 'the'],
+                answer: 'The bee is on the tree.'
+            },
+            {
+                type: 'unscramble',
+                part: 'b',
+                question: 'Unscramble the words to make a correct sentence:',
+                emoji: '🐑',
+                words: ['see', 'The', 'jeep', 'sheep', 'the'],
+                answer: 'The sheep see the jeep.'
+            },
+            {
+                type: 'unscramble',
+                part: 'b',
+                question: 'Unscramble the words to make a correct sentence:',
+                emoji: '🚐',
+                words: ['is', 'van', 'red', 'The'],
+                answer: 'The van is red.'
+            },
+            {
+                type: 'unscramble',
+                part: 'b',
+                question: 'Unscramble the words to make a correct sentence:',
+                emoji: '🌳',
+                words: ['see', 'a', 'tree', 'We'],
+                answer: 'We see a tree.'
+            },
+            {
+                type: 'unscramble',
+                part: 'b',
+                question: 'Unscramble the words to make a correct sentence:',
+                emoji: '🐱',
+                words: ['on', 'cat', 'The', 'mat', 'is', 'the'],
+                answer: 'The cat is on the mat.'
+            }
+        ];
+
+        let currentWritingQuestions = [];
+        let writingCanvasCtx = null;
+        let writingCanvasEl = null;
+        let isWriting = false;
+
+        function shuffleWriting() {
+            const container = document.getElementById('writingContent');
+            const selected = shuffleArray(writingQuestions).slice(0, 5);
+            currentWritingQuestions = selected;
+            
+            let html = '';
+            selected.forEach((q, idx) => {
+                const canvasId = 'writingCanvas' + idx;
+                
+                html += `<div class="reading-item" style="margin: 20px 0; position: relative;">`;
+                html += `<div class="reading-sentence">${q.question}</div>`;
+                html += `<div style="font-size: 4em; text-align: center; margin: 10px 0;">${q.emoji}</div>`;
+                
+                if (q.type === 'write') {
+                    html += `<div style="text-align: center; color: #999; font-size: 1.2em; margin: 5px 0;">Hint: ${q.hint}</div>`;
+                } else if (q.type === 'unscramble') {
+                    html += `<div style="text-align: center; color: #666; font-size: 1.3em; margin: 10px 0; font-style: italic;">${q.words.join(' - ')}</div>`;
+                }
+                
+                // Drawing canvas for writing answer
+                html += `<div style="position: relative; margin: 15px 0;">`;
+                html += `<canvas id="${canvasId}" class="writing-canvas" width="700" height="120" style="width: 100%; height: 120px; border: 2px dashed #ddd; border-radius: 10px; background: #fafafa; touch-action: none; cursor: crosshair;"></canvas>`;
+                html += `<div style="display: flex; justify-content: center; gap: 8px; margin-top: 8px; flex-wrap: wrap;">`;
+                html += `<button class="tool-btn color-btn active" style="background: #000000; width: 30px; height: 30px;" onclick="setWritingColor('#000000', this, ${idx})"></button>`;
+                html += `<button class="tool-btn color-btn" style="background: #ff0000; width: 30px; height: 30px;" onclick="setWritingColor('#ff0000', this, ${idx})"></button>`;
+                html += `<button class="tool-btn color-btn" style="background: #0000ff; width: 30px; height: 30px;" onclick="setWritingColor('#0000ff', this, ${idx})"></button>`;
+                html += `<button class="tool-btn" style="background: #f87171; color: white; padding: 5px 12px; font-size: 0.9em;" onclick="clearWritingCanvas('${canvasId}')">🗑️ Clear</button>`;
+                html += `<button class="tool-btn" style="background: #4ade80; color: white; padding: 5px 12px; font-size: 0.9em;" onclick="checkWritingAnswer(${idx})">✓ Check</button>`;
+                html += `</div></div>`;
+                
+                html += `</div>`;
+            });
+            
+            container.innerHTML = html;
+            
+            // Initialize canvases after render
+            setTimeout(() => {
+                selected.forEach((q, idx) => {
+                    initWritingCanvas('writingCanvas' + idx);
+                });
+            }, 100);
+        }
+
+        function initWritingCanvas(canvasId) {
+            const canvas = document.getElementById(canvasId);
+            if (!canvas) return;
+            
+            const ctx = canvas.getContext('2d');
+            ctx.strokeStyle = '#000000';
+            ctx.lineWidth = 3;
+            ctx.lineCap = 'round';
+            ctx.lineJoin = 'round';
+            
+            // Mouse events
+            canvas.onmousedown = (e) => {
+                isWriting = true;
+                writingCanvasCtx = ctx;
+                writingCanvasEl = canvas;
+                const rect = canvas.getBoundingClientRect();
+                const scaleX = canvas.width / rect.width;
+                const scaleY = canvas.height / rect.height;
+                ctx.beginPath();
+                ctx.moveTo((e.clientX - rect.left) * scaleX, (e.clientY - rect.top) * scaleY);
+            };
+            
+            canvas.onmousemove = (e) => {
+                if (!isWriting || writingCanvasCtx !== ctx) return;
+                const rect = canvas.getBoundingClientRect();
+                const scaleX = canvas.width / rect.width;
+                const scaleY = canvas.height / rect.height;
+                ctx.lineTo((e.clientX - rect.left) * scaleX, (e.clientY - rect.top) * scaleY);
+                ctx.stroke();
+            };
+            
+            canvas.onmouseup = () => { isWriting = false; };
+            canvas.onmouseout = () => { isWriting = false; };
+            
+            // Touch events for iPad/Apple Pencil
+            canvas.ontouchstart = (e) => {
+                e.preventDefault();
+                const touch = e.touches[0];
+                const rect = canvas.getBoundingClientRect();
+                const scaleX = canvas.width / rect.width;
+                const scaleY = canvas.height / rect.height;
+                isWriting = true;
+                writingCanvasCtx = ctx;
+                writingCanvasEl = canvas;
+                ctx.beginPath();
+                ctx.moveTo((touch.clientX - rect.left) * scaleX, (touch.clientY - rect.top) * scaleY);
+            };
+            
+            canvas.ontouchmove = (e) => {
+                e.preventDefault();
+                if (!isWriting || writingCanvasCtx !== ctx) return;
+                const touch = e.touches[0];
+                const rect = canvas.getBoundingClientRect();
+                const scaleX = canvas.width / rect.width;
+                const scaleY = canvas.height / rect.height;
+                ctx.lineTo((touch.clientX - rect.left) * scaleX, (touch.clientY - rect.top) * scaleY);
+                ctx.stroke();
+            };
+            
+            canvas.ontouchend = () => { isWriting = false; };
+        }
+
+        function setWritingColor(color, btn, idx) {
+            const canvas = document.getElementById('writingCanvas' + idx);
+            if (canvas) {
+                canvas.getContext('2d').strokeStyle = color;
+            }
+            btn.parentElement.querySelectorAll('.color-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+        }
+
+        function clearWritingCanvas(canvasId) {
+            const canvas = document.getElementById(canvasId);
+            if (canvas) {
+                canvas.getContext('2d').clearRect(0, 0, canvas.width, canvas.height);
+            }
+        }
+
+        function checkWritingAnswer(idx) {
+            const q = currentWritingQuestions[idx];
+            total++;
+            score++;
+            updateScore();
+            showReward('✅', 'Great writing! Keep practicing! ✍️');
+            createConfetti();
+        }
+
+        // ==================== JAWAD'S SECTION ====================
+        const jawadQuestions = [
+            { question: "What color is this? 🤔", emoji: '<div class="jawad-emoji" style="color: #ff0000;">❤️</div>', choices: [{ emoji: "🔴", correct: true, style: "background: #ff0000;" }, { emoji: "🔵", correct: false, style: "background: #0000ff;" }, { emoji: "🟢", correct: false, style: "background: #00aa00;" }] },
+            { question: "Where is the cat? 🐱", emoji: "", choices: [{ emoji: "🐶", correct: false }, { emoji: "🐱", correct: true }, { emoji: "🐦", correct: false }] },
+            { question: "Find the circle! ⭕", emoji: "", choices: [{ emoji: "⬛", correct: false }, { emoji: "🔺", correct: false }, { emoji: "⭕", correct: true }] },
+            { question: "How many stars? ⭐", emoji: '<div style="font-size: 3em; margin: 15px 0;">⭐ ⭐ </div>', choices: [{ emoji: "2️⃣", correct: false, style: "font-size: 3em;" }, { emoji: "3️⃣", correct: true, style: "font-size: 3em;" }, { emoji: "4️⃣", correct: false, style: "font-size: 3em;" }] },
+            { question: "Which one is a fruit? 🍎", emoji: "", choices: [{ emoji: "🚗", correct: false }, { emoji: "🍌", correct: true }, { emoji: "👟", correct: false }] },
+            { question: 'Who says "Moo"? 🐄', emoji: "", choices: [{ emoji: "🐱", correct: false }, { emoji: "🐄", correct: true }, { emoji: "🐶", correct: false }] },
+            { question: "Where is the sun? ☀️", emoji: "", choices: [{ emoji: "☀️", correct: true }, { emoji: "🌙", correct: false }, { emoji: "⭐", correct: false }] },
+            { question: "Which one is BIG? 🐘", emoji: "", choices: [{ emoji: "🐘", correct: true }, { emoji: "🐜", correct: false }] },
+            { question: "What color is the sky? 🌤️", emoji: '<div class="jawad-emoji">🌤️</div>', choices: [{ emoji: "🔵", correct: true, style: "background: #4facfe;" }, { emoji: "🔴", correct: false, style: "background: #ff0000;" }, { emoji: "🟢", correct: false, style: "background: #00aa00;" }] },
+            { question: "Find the dog! 🐶", emoji: "", choices: [{ emoji: "🐱", correct: false }, { emoji: "🐶", correct: true }, { emoji: "🐟", correct: false }] },
+            { question: "Which one flies? ✈️", emoji: "", choices: [{ emoji: "🚗", correct: false }, { emoji: "✈️", correct: true }, { emoji: "🚢", correct: false }] },
+            { question: "How many fingers? 🖐️", emoji: '<div class="jawad-emoji">🖐️</div>', choices: [{ emoji: "3️⃣", correct: false, style: "font-size: 3em;" }, { emoji: "5️⃣", correct: true, style: "font-size: 3em;" }, { emoji: "2️⃣", correct: false, style: "font-size: 3em;" }] },
+            { question: "Find the fish! 🐟", emoji: "", choices: [{ emoji: "🐟", correct: true }, { emoji: "🐦", correct: false }, { emoji: "🐸", correct: false }] },
+            { question: "What shape is this? 🔺", emoji: '<div class="jawad-emoji">🔺</div>', choices: [{ emoji: "⭕", correct: false }, { emoji: "🔺", correct: true }, { emoji: "⬛", correct: false }] },
+            { question: "Which one swims? 🏊", emoji: "", choices: [{ emoji: "🐟", correct: true }, { emoji: "🐱", correct: false }, { emoji: "🐦", correct: false }] },
+            { question: "Find the moon! 🌙", emoji: "", choices: [{ emoji: "☀️", correct: false }, { emoji: "🌙", correct: true }, { emoji: "⭐", correct: false }] },
+            { question: "Which one is SMALL? 🐜", emoji: "", choices: [{ emoji: "🐘", correct: false }, { emoji: "🐜", correct: true }] },
+            { question: "What color is grass? 🌿", emoji: '<div class="jawad-emoji">🌿</div>', choices: [{ emoji: "🔴", correct: false, style: "background: #ff0000;" }, { emoji: "🟢", correct: true, style: "background: #00aa00;" }, { emoji: "🔵", correct: false, style: "background: #0000ff;" }] },
+            { question: "Find the bird! 🐦", emoji: "", choices: [{ emoji: "🐶", correct: false }, { emoji: "🐦", correct: true }, { emoji: "🐱", correct: false }] },
+            { question: "Which one is a vehicle? 🚗", emoji: "", choices: [{ emoji: "🍎", correct: false }, { emoji: "🚗", correct: true }, { emoji: "🌳", correct: false }] }
+        ];
+
+        let currentJawadQuestions = [];
+
+        function renderJawadQuestions(questions) {
+            const container = document.getElementById('jawadQuestions');
+            container.innerHTML = '';
+            
+            questions.forEach(q => {
+                const item = document.createElement('div');
+                item.className = 'jawad-item';
+                
+                let choicesHTML = '';
+                const shuffledChoices = shuffleArray(q.choices);
+                shuffledChoices.forEach(choice => {
+                    const style = choice.style || '';
+                    choicesHTML += `<div class="jawad-choice" onclick="checkJawad(this, ${choice.correct})" style="${style}">${choice.emoji}</div>`;
+                });
+                
+                item.innerHTML = `
+                    <div class="jawad-question">${q.question}</div>
+                    ${q.emoji}
+                    <div class="jawad-choices">${choicesHTML}</div>
+                `;
+                container.appendChild(item);
+            });
+        }
+
+        function shuffleJawadQuestions() {
+            currentJawadQuestions = shuffleArray(jawadQuestions).slice(0, 5);
+            renderJawadQuestions(currentJawadQuestions);
+        }
+
+        function checkJawad(el, isCorrect) {
+            const parent = el.parentElement;
+            if (parent.dataset.answered) return;
+            parent.dataset.answered = 'true';
+            total++;
+
+            parent.querySelectorAll('.jawad-choice').forEach(c => c.style.pointerEvents = 'none');
+
+            if (isCorrect) {
+                el.classList.add('correct');
+                score++;
+                showReward('🎉', 'Yaaay! Great job Jawad! 🌟');
+                createConfetti();
+            } else {
+                el.classList.add('wrong');
+                parent.querySelectorAll('.jawad-choice').forEach(c => {
+                    if (c.onclick && c.onclick.toString().includes('true')) {
+                        c.classList.add('correct');
+                    }
+                });
+                showReward('😊', 'Oops! Look at the right one! 👆');
+            }
+            updateScore();
+        }
+
+        // ==================== ARABIC PRACTICE ====================
+        const arabicPhrases = [
+            // Basic Islamic phrases
+            { arabic: 'بِسْمِ اللَّهِ', meaning: 'In the name of Allah', transliteration: 'Bismillah' },
+            { arabic: 'الْحَمْدُ لِلَّهِ', meaning: 'All praise is due to Allah', transliteration: 'Alhamdulillah' },
+            { arabic: 'سُبْحَانَ اللَّهِ', meaning: 'Glory be to Allah', transliteration: 'SubhanAllah' },
+            { arabic: 'اللَّهُ أَكْبَرُ', meaning: 'Allah is the Greatest', transliteration: 'Allahu Akbar' },
+            { arabic: 'لَا إِلَهَ إِلَّا اللَّهُ', meaning: 'There is no god but Allah', transliteration: 'La ilaha illallah' },
+            { arabic: 'أَسْتَغْفِرُ اللَّهَ', meaning: 'I seek forgiveness from Allah', transliteration: 'Astaghfirullah' },
+            { arabic: 'إِنْ شَاءَ اللَّهُ', meaning: 'If Allah wills', transliteration: 'InshaAllah' },
+            { arabic: 'مَا شَاءَ اللَّهُ', meaning: 'What Allah has willed', transliteration: 'MashaAllah' },
+            // Short duas
+            { arabic: 'رَبَّنَا آتِنَا فِي الدُّنْيَا حَسَنَةً', meaning: 'Our Lord, give us good in this world', transliteration: 'Rabbana atina fid-dunya hasanah' },
+            { arabic: 'رَبِّ اشْرَحْ لِي صَدْرِي', meaning: 'My Lord, expand my chest', transliteration: 'Rabbi ishrah li sadri' },
+            { arabic: 'اللَّهُمَّ إِنِّي أَسْأَلُكَ الْعَافِيَةَ', meaning: 'O Allah, I ask You for well-being', transliteration: 'Allahumma inni as\'aluka al-afiyah' },
+            { arabic: 'رَبِّ زِدْنِي عِلْمًا', meaning: 'My Lord, increase me in knowledge', transliteration: 'Rabbi zidni ilma' },
+            // Daily phrases
+            { arabic: 'صَبَاحُ الْخَيْرِ', meaning: 'Good morning', transliteration: 'Sabah al-khair' },
+            { arabic: 'مَسَاءُ الْخَيْرِ', meaning: 'Good evening', transliteration: 'Masa\' al-khair' },
+            { arabic: 'جَزَاكَ اللَّهُ خَيْرًا', meaning: 'May Allah reward you with good', transliteration: 'JazakAllah khairan' },
+            { arabic: 'بَارَكَ اللَّهُ فِيكَ', meaning: 'May Allah bless you', transliteration: 'BarakAllahu feek' },
+            // Quran short phrases
+            { arabic: 'قُلْ هُوَ اللَّهُ أَحَدٌ', meaning: 'Say: He is Allah, the One', transliteration: 'Qul huwa Allahu ahad' },
+            { arabic: 'اللَّهُ الصَّمَدُ', meaning: 'Allah, the Eternal Refuge', transliteration: 'Allahu as-samad' },
+            { arabic: 'لَمْ يَلِدْ وَلَمْ يُولَدْ', meaning: 'He neither begets nor was born', transliteration: 'Lam yalid wa lam yulad' },
+            { arabic: 'وَلَمْ يَكُنْ لَهُ كُفُوًا أَحَدٌ', meaning: 'Nor is there anyone equal to Him', transliteration: 'Wa lam yakun lahu kufuwan ahad' },
+            // More daily phrases
+            { arabic: 'سَمِعْنَا وَأَطَعْنَا', meaning: 'We hear and we obey', transliteration: 'Sami\'na wa ata\'na' },
+            { arabic: 'حَسْبُنَا اللَّهُ وَنِعْمَ الْوَكِيلُ', meaning: 'Allah is sufficient for us', transliteration: 'HasbunAllahu wa ni\'mal wakeel' },
+            { arabic: 'لَا حَوْلَ وَلَا قُوَّةَ إِلَّا بِاللَّهِ', meaning: 'No power except with Allah', transliteration: 'La hawla wa la quwwata illa billah' },
+            { arabic: 'اللَّهُمَّ صَلِّ عَلَى مُحَمَّدٍ', meaning: 'O Allah, send blessings upon Muhammad', transliteration: 'Allahumma salli ala Muhammad' },
+            { arabic: 'رَبَّنَا تَقَبَّلْ مِنَّا', meaning: 'Our Lord, accept from us', transliteration: 'Rabbana taqabbal minna' },
+            { arabic: 'إِنَّ اللَّهَ مَعَ الصَّابِرِينَ', meaning: 'Indeed, Allah is with the patient', transliteration: 'Inna Allaha ma\'a as-sabireen' },
+            { arabic: 'وَقُلْ رَبِّ ارْحَمْهُمَا', meaning: 'And say: My Lord, have mercy on them', transliteration: 'Wa qul rabbi irhamhuma' },
+            { arabic: 'رَبِّ أَوْزِعْنِي أَنْ أَشْكُرَ نِعْمَتَكَ', meaning: 'My Lord, enable me to be grateful for Your favor', transliteration: 'Rabbi awzi\'ni an ashkura ni\'matak' },
+            { arabic: 'اللَّهُ نُورُ السَّمَاوَاتِ وَالْأَرْضِ', meaning: 'Allah is the Light of the heavens and the earth', transliteration: 'Allahu nuru as-samawati wal-ard' },
+            { arabic: 'رَحْمَةً لِلْعَالَمِينَ', meaning: 'A mercy to all the worlds', transliteration: 'Rahmatan lil-\'alameen' },
+        ];
+
+        let currentArabicPhrases = [];
+        let arabicCanvasContexts = {};
+
+        function shuffleArabic() {
+            const container = document.getElementById('arabicContent');
+            const selected = shuffleArray(arabicPhrases).slice(0, 5);
+            currentArabicPhrases = selected;
+
+            // Progress dots
+            let dotsHTML = '<div class="arabic-progress-bar">';
+            selected.forEach((_, i) => {
+                dotsHTML += `<div class="arabic-progress-dot ${i === 0 ? 'current' : ''}" id="arabicDot${i}"></div>`;
+            });
+            dotsHTML += '</div>';
+
+            let html = dotsHTML;
+            selected.forEach((phrase, idx) => {
+                const canvasId = 'arabicCanvas' + idx;
+                html += `
+                    <div class="arabic-phrase-card" id="arabicCard${idx}">
+                        <div class="arabic-phrase-text">${phrase.arabic}</div>
+                        <div class="arabic-phrase-meaning">📖 ${phrase.meaning}</div>
+                        <div class="arabic-phrase-transliteration">🔤 ${phrase.transliteration}</div>
+                        <canvas id="${canvasId}" class="arabic-writing-canvas" width="700" height="150" style="width: 100%; height: 150px;"></canvas>
+                        <div class="arabic-tools">
+                            <button class="arabic-tool-btn clear" onclick="clearArabicCanvas('${canvasId}')">🗑️ Clear</button>
+                            <button class="arabic-tool-btn check" onclick="checkArabicWriting(${idx})">✓ I Wrote It!</button>
+                        </div>
+                    </div>
+                `;
+            });
+
+            container.innerHTML = html;
+
+            // Initialize canvases
+            setTimeout(() => {
+                selected.forEach((_, idx) => {
+                    initArabicCanvas('arabicCanvas' + idx);
+                });
+            }, 100);
+        }
+
+        function initArabicCanvas(canvasId) {
+            const canvas = document.getElementById(canvasId);
+            if (!canvas) return;
+
+            const ctx = canvas.getContext('2d');
+            ctx.strokeStyle = '#059669';
+            ctx.lineWidth = 3;
+            ctx.lineCap = 'round';
+            ctx.lineJoin = 'round';
+
+            // Draw guide lines
+            drawArabicGuideLines(ctx, canvas);
+
+            // Mouse events
+            canvas.onmousedown = (e) => {
+                const rect = canvas.getBoundingClientRect();
+                const scaleX = canvas.width / rect.width;
+                const scaleY = canvas.height / rect.height;
+                ctx.beginPath();
+                ctx.moveTo((e.clientX - rect.left) * scaleX, (e.clientY - rect.top) * scaleY);
+                canvas._isWriting = true;
+            };
+
+            canvas.onmousemove = (e) => {
+                if (!canvas._isWriting) return;
+                const rect = canvas.getBoundingClientRect();
+                const scaleX = canvas.width / rect.width;
+                const scaleY = canvas.height / rect.height;
+                ctx.lineTo((e.clientX - rect.left) * scaleX, (e.clientY - rect.top) * scaleY);
+                ctx.stroke();
+            };
+
+            canvas.onmouseup = () => { canvas._isWriting = false; };
+            canvas.onmouseout = () => { canvas._isWriting = false; };
+
+            // Touch events for iPad/Apple Pencil
+            canvas.ontouchstart = (e) => {
+                e.preventDefault();
+                const touch = e.touches[0];
+                const rect = canvas.getBoundingClientRect();
+                const scaleX = canvas.width / rect.width;
+                const scaleY = canvas.height / rect.height;
+                ctx.beginPath();
+                ctx.moveTo((touch.clientX - rect.left) * scaleX, (touch.clientY - rect.top) * scaleY);
+                canvas._isWriting = true;
+            };
+
+            canvas.ontouchmove = (e) => {
+                e.preventDefault();
+                if (!canvas._isWriting) return;
+                const touch = e.touches[0];
+                const rect = canvas.getBoundingClientRect();
+                const scaleX = canvas.width / rect.width;
+                const scaleY = canvas.height / rect.height;
+                ctx.lineTo((touch.clientX - rect.left) * scaleX, (touch.clientY - rect.top) * scaleY);
+                ctx.stroke();
+            };
+
+            canvas.ontouchend = () => { canvas._isWriting = false; };
+        }
+
+        function drawArabicGuideLines(ctx, canvas) {
+            ctx.save();
+            ctx.strokeStyle = '#e5e7eb';
+            ctx.lineWidth = 1;
+            ctx.setLineDash([5, 5]);
+
+            // Horizontal guide lines
+            for (let y = 30; y < canvas.height; y += 40) {
+                ctx.beginPath();
+                ctx.moveTo(10, y);
+                ctx.lineTo(canvas.width - 10, y);
+                ctx.stroke();
+            }
+
+            ctx.restore();
+        }
+
+        function clearArabicCanvas(canvasId) {
+            const canvas = document.getElementById(canvasId);
+            if (canvas) {
+                const ctx = canvas.getContext('2d');
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                drawArabicGuideLines(ctx, canvas);
+            }
+        }
+
+        function checkArabicWriting(idx) {
+            total++;
+            score++;
+            updateScore();
+
+            // Update progress dots
+            const dot = document.getElementById('arabicDot' + idx);
+            if (dot) dot.classList.add('done');
+            const nextDot = document.getElementById('arabicDot' + (idx + 1));
+            if (nextDot) nextDot.classList.add('current');
+
+            showReward('✅', 'Excellent writing! Keep practicing! 🕌✨');
+            createConfetti();
+        }
+
+        // ==================== AUTO PLAY ====================
+        function toggleAutoPlay(section) {
+            const btn = document.getElementById(section + 'AutoBtn');
+            const status = document.getElementById(section + 'AutoStatus');
+            
+            if (autoPlayIntervals[section]) {
+                clearInterval(autoPlayIntervals[section]);
+                autoPlayIntervals[section] = null;
+                btn.textContent = '🔄 Auto Play - New Questions Every 30s!';
+                btn.classList.remove('active');
+                status.textContent = '';
+            } else {
+                // Shuffle immediately
+                if (section === 'phonics') shufflePhonics();
+                else if (section === 'reading') shuffleReading();
+                else if (section === 'vocab') shuffleVocab();
+                else if (section === 'listening') shuffleListening();
+                else if (section === 'science') shuffleScience();
+                else if (section === 'writing') shuffleWriting();
+                else if (section === 'jawad') shuffleJawadQuestions();
+                else if (section === 'arabic') shuffleArabic();
+
+                const intervalTime = section === 'jawad' ? 20000 : 30000;
+
+                autoPlayIntervals[section] = setInterval(() => {
+                    if (section === 'phonics') shufflePhonics();
+                    else if (section === 'reading') shuffleReading();
+                    else if (section === 'vocab') shuffleVocab();
+                    else if (section === 'listening') shuffleListening();
+                    else if (section === 'science') shuffleScience();
+                    else if (section === 'writing') shuffleWriting();
+                    else if (section === 'jawad') shuffleJawadQuestions();
+                    else if (section === 'arabic') shuffleArabic();
+                }, intervalTime);
+                
+                btn.textContent = '⏹️ Stop Auto Play';
+                btn.classList.add('active');
+                status.textContent = `🎉 New questions every ${section === 'jawad' ? '20' : '30'} seconds!`;
+            }
+        }
+
+        // ==================== UTILITIES ====================
+        function shuffleArray(arr) {
+            const shuffled = [...arr];
+            for (let i = shuffled.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+            }
+            return shuffled;
+        }
+
+        function showReward(title, msg) {
+            document.getElementById('rewardTitle').textContent = title;
+            document.getElementById('rewardMsg').textContent = msg;
+            document.getElementById('rewardPopup').style.display = 'block';
+        }
+
+        function closeReward() {
+            document.getElementById('rewardPopup').style.display = 'none';
+        }
+
+        function createConfetti() {
+            const colors = ['#ff6b6b', '#ffd93d', '#4ade80', '#4facfe', '#a78bfa', '#f093fb'];
+            for (let i = 0; i < 30; i++) {
+                const c = document.createElement('div');
+                c.className = 'confetti';
+                c.style.left = Math.random() * 100 + 'vw';
+                c.style.background = colors[Math.floor(Math.random() * colors.length)];
+                c.style.animationDelay = Math.random() * 2 + 's';
+                document.body.appendChild(c);
+                setTimeout(() => c.remove(), 3000);
+            }
+        }
+
+        updateScore();
+    </script>
+</body>
+</html>

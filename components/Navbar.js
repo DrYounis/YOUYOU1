@@ -95,6 +95,7 @@ export default function Navbar() {
                     <Link href="/diaries" style={navStyles.link}>📖 Diaries</Link>
                     <Link href="/friends" style={navStyles.link}>👫 Friends</Link>
                     <Link href="/about" style={navStyles.link}>ℹ️ About</Link>
+                    <Link href="/legacy/index.html" style={{...navStyles.link, background: 'rgba(50, 200, 150, 0.3)', border: '2px solid rgba(50, 200, 150, 0.6)'}}>📚 Classic App</Link>
                     <Link href="/practice/naskh" style={{...navStyles.link, background: 'rgba(255,200,0,0.3)', border: '2px solid rgba(255,200,0,0.6)', fontWeight: '900'}}>🖋️ خط النسخ</Link>
                     <Link href="/practice/english-notebook" style={{...navStyles.link, background: 'rgba(218, 55, 50, 0.3)', border: '2px solid rgba(218, 55, 50, 0.6)', fontWeight: '900'}}>📓 English HW</Link>
                 </div>
@@ -113,6 +114,7 @@ export default function Navbar() {
                     <Link href="/diaries" onClick={toggleMenu} style={{ ...navStyles.link, fontSize: '1.6rem', textAlign: 'center' }}>📖 Diaries</Link>
                     <Link href="/friends" onClick={toggleMenu} style={{ ...navStyles.link, fontSize: '1.6rem', textAlign: 'center' }}>👫 Friends</Link>
                     <Link href="/about" onClick={toggleMenu} style={{ ...navStyles.link, fontSize: '1.6rem', textAlign: 'center' }}>ℹ️ About</Link>
+                    <Link href="/legacy/index.html" onClick={toggleMenu} style={{ ...navStyles.link, fontSize: '1.6rem', textAlign: 'center', background: 'rgba(50, 200, 150, 0.3)', border: '2px solid rgba(50, 200, 150, 0.6)' }}>📚 Classic App</Link>
                     <Link href="/practice/naskh" onClick={toggleMenu} style={{ ...navStyles.link, fontSize: '1.6rem', textAlign: 'center', background: 'rgba(255,200,0,0.3)', border: '2px solid rgba(255,200,0,0.6)', fontWeight: '900' }}>🖋️ خط النسخ</Link>
                     <Link href="/practice/english-notebook" onClick={toggleMenu} style={{ ...navStyles.link, fontSize: '1.6rem', textAlign: 'center', background: 'rgba(218, 55, 50, 0.3)', border: '2px solid rgba(218, 55, 50, 0.6)', fontWeight: '900' }}>📓 English HW</Link>
                 </div>

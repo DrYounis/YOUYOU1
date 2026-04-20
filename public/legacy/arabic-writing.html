@@ -1,0 +1,1268 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>يونس - تدريب الكتابة العربية</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Noto+Naskh+Arabic:wght@400;700&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Amiri', 'Noto Naskh Arabic', serif;
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 50%, #1e3c72 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            color: white;
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            font-size: 2.8em;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .header p {
+            font-size: 1.3em;
+            opacity: 0.9;
+        }
+
+        .nav-tabs {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 30px;
+        }
+
+        .nav-tab {
+            padding: 12px 24px;
+            background: white;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1.1em;
+            font-weight: bold;
+            font-family: 'Amiri', serif;
+            transition: all 0.3s;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .nav-tab:hover, .nav-tab.active {
+            background: #ffd700;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.2);
+        }
+
+        .section {
+            display: none;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .section.active {
+            display: block;
+        }
+
+        .card {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+        }
+
+        .card h2 {
+            color: #1e3c72;
+            margin-bottom: 20px;
+            text-align: center;
+            font-size: 2em;
+        }
+
+        .card h3 {
+            color: #2a5298;
+            margin-bottom: 15px;
+        }
+
+        /* Letters Grid */
+        .letters-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .letter-card {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            border-radius: 15px;
+            padding: 15px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: 3px solid transparent;
+        }
+
+        .letter-card:hover {
+            transform: scale(1.1);
+            border-color: #1e3c72;
+        }
+
+        .letter-card .letter {
+            font-size: 2.5em;
+            color: #1e3c72;
+        }
+
+        .letter-card .name {
+            font-size: 0.9em;
+            color: #666;
+            margin-top: 5px;
+        }
+
+        .letter-card.learned {
+            background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+            border-color: #4CAF50;
+        }
+
+        /* Tracing Section */
+        .trace-container {
+            text-align: center;
+            margin: 30px 0;
+        }
+
+        .trace-letter {
+            font-size: 8em;
+            color: #e0e0e0;
+            margin: 20px 0;
+            user-select: none;
+            line-height: 1.2;
+        }
+
+        .trace-input {
+            font-size: 3em;
+            padding: 15px 30px;
+            border: 3px dashed #1e3c72;
+            border-radius: 15px;
+            text-align: center;
+            width: 200px;
+            font-family: 'Amiri', serif;
+            direction: rtl;
+        }
+
+        .trace-input:focus {
+            outline: none;
+            border-color: #ffd700;
+            background: #fffde7;
+        }
+
+        .trace-input.correct {
+            border-color: #4CAF50;
+            background: #e8f5e9;
+        }
+
+        /* Writing Practice */
+        .writing-area {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+
+        .writing-line {
+            border-bottom: 2px solid #ccc;
+            min-height: 80px;
+            margin: 15px 0;
+            position: relative;
+        }
+
+        .writing-line textarea {
+            width: 100%;
+            height: 70px;
+            border: none;
+            background: transparent;
+            font-size: 2em;
+            font-family: 'Amiri', serif;
+            direction: rtl;
+            resize: none;
+            outline: none;
+        }
+
+        .writing-line .guide-text {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            font-size: 2em;
+            color: #e0e0e0;
+            pointer-events: none;
+        }
+
+        /* Word Building */
+        .word-builder {
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .target-word {
+            font-size: 3em;
+            color: #1e3c72;
+            margin: 20px 0;
+            padding: 20px;
+            background: #f5f7fa;
+            border-radius: 15px;
+        }
+
+        .letter-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
+            margin: 20px 0;
+        }
+
+        .letter-btn {
+            width: 60px;
+            height: 60px;
+            font-size: 1.8em;
+            font-family: 'Amiri', serif;
+            border: 2px solid #1e3c72;
+            border-radius: 10px;
+            background: white;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .letter-btn:hover {
+            background: #1e3c72;
+            color: white;
+        }
+
+        .letter-btn.used {
+            opacity: 0.3;
+            pointer-events: none;
+        }
+
+        .answer-box {
+            font-size: 2.5em;
+            min-height: 70px;
+            padding: 15px;
+            background: #fffde7;
+            border: 3px dashed #ffd700;
+            border-radius: 15px;
+            margin: 20px 0;
+            direction: rtl;
+        }
+
+        /* Sentences */
+        .sentence-practice {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 20px;
+            margin: 15px 0;
+        }
+
+        .sentence-practice .sentence {
+            font-size: 1.8em;
+            color: #1e3c72;
+            margin-bottom: 15px;
+            line-height: 1.8;
+        }
+
+        .sentence-practice input {
+            width: 100%;
+            padding: 15px;
+            font-size: 1.5em;
+            font-family: 'Amiri', serif;
+            border: 2px solid #ccc;
+            border-radius: 10px;
+            direction: rtl;
+            text-align: right;
+        }
+
+        .sentence-practice input:focus {
+            outline: none;
+            border-color: #1e3c72;
+        }
+
+        /* Buttons */
+        .btn {
+            padding: 12px 30px;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1.1em;
+            font-weight: bold;
+            font-family: 'Amiri', serif;
+            transition: all 0.3s;
+            margin: 10px 5px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            color: white;
+        }
+
+        .btn-success {
+            background: linear-gradient(135deg, #4CAF50 0%, #45a049 100%);
+            color: white;
+        }
+
+        .btn-warning {
+            background: linear-gradient(135deg, #FFD700 0%, #FFA000 100%);
+            color: #333;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.2);
+        }
+
+        /* Feedback */
+        .feedback {
+            text-align: center;
+            padding: 15px;
+            border-radius: 10px;
+            margin: 15px 0;
+            font-weight: bold;
+            font-size: 1.2em;
+            display: none;
+        }
+
+        .feedback.show {
+            display: block;
+        }
+
+        .feedback.success {
+            background: #e8f5e9;
+            color: #2e7d32;
+        }
+
+        .feedback.error {
+            background: #ffebee;
+            color: #c62828;
+        }
+
+        /* Score */
+        .score-display {
+            text-align: center;
+            font-size: 1.5em;
+            color: #1e3c72;
+            margin: 20px 0;
+        }
+
+        .score-display .stars {
+            font-size: 1.5em;
+        }
+
+        /* Progress */
+        .progress-bar {
+            width: 100%;
+            height: 20px;
+            background: #e0e0e0;
+            border-radius: 10px;
+            overflow: hidden;
+            margin: 15px 0;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #4CAF50, #8BC34A);
+            transition: width 0.5s;
+            border-radius: 10px;
+        }
+
+        /* Animations */
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .bounce {
+            animation: bounce 0.5s;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+
+        .shake {
+            animation: shake 0.3s;
+        }
+
+        /* Canvas for drawing */
+        .drawing-canvas {
+            border: 3px solid #1e3c72;
+            border-radius: 15px;
+            background: white;
+            cursor: crosshair;
+            touch-action: none;
+            margin: 20px auto;
+            display: block;
+        }
+
+        .canvas-controls {
+            text-align: center;
+            margin: 15px 0;
+        }
+
+        /* Responsive */
+        @media (max-width: 600px) {
+            .header h1 {
+                font-size: 2em;
+            }
+            
+            .nav-tab {
+                padding: 10px 15px;
+                font-size: 1em;
+            }
+            
+            .card {
+                padding: 20px;
+            }
+            
+            .trace-letter {
+                font-size: 5em;
+            }
+        }
+
+        /* Dots pattern for tracing */
+        .dots-letter {
+            font-size: 8em;
+            color: #ccc;
+            letter-spacing: 5px;
+            margin: 20px 0;
+            background-image: radial-gradient(circle, #999 1px, transparent 1px);
+            background-size: 10px 10px;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* Form shapes */
+        .form-display {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            flex-wrap: wrap;
+            margin: 20px 0;
+        }
+
+        .form-box {
+            text-align: center;
+            padding: 20px;
+            background: #f5f7fa;
+            border-radius: 15px;
+            min-width: 120px;
+        }
+
+        .form-box .form-letter {
+            font-size: 3em;
+            color: #1e3c72;
+        }
+
+        .form-box .form-name {
+            font-size: 1em;
+            color: #666;
+            margin-top: 10px;
+        }
+
+        /* Quiz styles */
+        .quiz-question {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 20px;
+            margin: 15px 0;
+        }
+
+        .quiz-question .question-text {
+            font-size: 1.5em;
+            color: #1e3c72;
+            margin-bottom: 15px;
+        }
+
+        .quiz-options {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
+        }
+
+        .quiz-option {
+            padding: 15px 25px;
+            font-size: 1.5em;
+            font-family: 'Amiri', serif;
+            border: 2px solid #1e3c72;
+            border-radius: 10px;
+            background: white;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .quiz-option:hover {
+            background: #1e3c72;
+            color: white;
+        }
+
+        .quiz-option.correct {
+            background: #4CAF50;
+            border-color: #4CAF50;
+            color: white;
+        }
+
+        .quiz-option.wrong {
+            background: #f44336;
+            border-color: #f44336;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>✏️ تدريب الكتابة العربية ليونس ✏️</h1>
+        <p>هيا نتعلم ونكتب بالعربية! 🌟</p>
+    </div>
+
+    <div class="nav-tabs">
+        <button class="nav-tab active" onclick="showSection('letters')">📝 الحروف</button>
+        <button class="nav-tab" onclick="showSection('trace')">✍️ التتبع</button>
+        <button class="nav-tab" onclick="showSection('words')">📖 الكلمات</button>
+        <button class="nav-tab" onclick="showSection('sentences')">📜 الجمل</button>
+        <button class="nav-tab" onclick="showSection('draw')">🎨 الرسم</button>
+        <button class="nav-tab" onclick="showSection('quiz')">📝 اختبار</button>
+    </div>
+
+    <!-- LETTERS SECTION -->
+    <div id="letters" class="section active">
+        <div class="card">
+            <h2>📝 الحروف العربية</h2>
+            <p style="text-align: center; margin-bottom: 20px;">اضغط على كل حرف لتتعلمه!</p>
+            
+            <div class="letters-grid" id="lettersGrid"></div>
+            
+            <div class="feedback" id="lettersFeedback"></div>
+        </div>
+
+        <div class="card">
+            <h2>🔤 أشكال الحرف</h2>
+            <p style="text-align: center; margin-bottom: 20px;">كل حرف له أشكال مختلفة!</p>
+            
+            <div class="form-display" id="formDisplay">
+                <div class="form-box">
+                    <div class="form-letter" id="formIsolated">ا</div>
+                    <div class="form-name">منفصل</div>
+                </div>
+                <div class="form-box">
+                    <div class="form-letter" id="formInitial">ا</div>
+                    <div class="form-name">أول الكلمة</div>
+                </div>
+                <div class="form-box">
+                    <div class="form-letter" id="formMedial">ا</div>
+                    <div class="form-name">وسط الكلمة</div>
+                </div>
+                <div class="form-box">
+                    <div class="form-letter" id="formFinal">ا</div>
+                    <div class="form-name">آخر الكلمة</div>
+                </div>
+            </div>
+            
+            <div style="text-align: center;">
+                <button class="btn btn-primary" onclick="nextLetterForm()">الحرف التالي ←</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- TRACE SECTION -->
+    <div id="trace" class="section">
+        <div class="card">
+            <h2>✍️ تتبع الحروف</h2>
+            <p style="text-align: center; margin-bottom: 20px;">اكتب الحرف الذي تراه!</p>
+            
+            <div class="trace-container">
+                <div class="trace-letter" id="traceLetter">ا</div>
+                <div style="font-size: 1.2em; color: #666; margin-bottom: 15px;" id="traceLetterName">ألف</div>
+                <input type="text" class="trace-input" id="traceInput" placeholder="اكتب هنا" onkeyup="checkTrace()">
+            </div>
+            
+            <div style="text-align: center;">
+                <button class="btn btn-primary" onclick="nextTraceLetter()">الحرف التالي ←</button>
+                <button class="btn btn-warning" onclick="resetTrace()">إعادة ↻</button>
+            </div>
+            <div class="feedback" id="traceFeedback"></div>
+        </div>
+
+        <div class="card">
+            <h2>✏️ تتبع الكلمات</h2>
+            <p style="text-align: center; margin-bottom: 20px;">اكتب الكلمة التي تراها!</p>
+            
+            <div class="trace-container">
+                <div class="trace-letter" id="traceWord" style="font-size: 4em;">شمس</div>
+                <input type="text" class="trace-input" id="traceWordInput" placeholder="اكتب الكلمة" onkeyup="checkTraceWord()" style="width: 300px;">
+            </div>
+            
+            <div style="text-align: center;">
+                <button class="btn btn-primary" onclick="nextTraceWord()">الكلمة التالية ←</button>
+            </div>
+            <div class="feedback" id="traceWordFeedback"></div>
+        </div>
+    </div>
+
+    <!-- WORDS SECTION -->
+    <div id="words" class="section">
+        <div class="card">
+            <h2>📖 بناء الكلمات</h2>
+            <p style="text-align: center; margin-bottom: 20px;">رتّب الحروف لتكوين الكلمة!</p>
+            
+            <div class="word-builder">
+                <div class="target-word" id="targetWord">شمس</div>
+                <div style="font-size: 1.2em; color: #666;" id="wordHint">☀️ شيء يضيء في السماء</div>
+                <div class="answer-box" id="answerBox"></div>
+                <div class="letter-buttons" id="letterButtons"></div>
+            </div>
+            
+            <div style="text-align: center;">
+                <button class="btn btn-primary" onclick="checkWord()">تحقق ✓</button>
+                <button class="btn btn-warning" onclick="resetWord()">إعادة ↻</button>
+                <button class="btn btn-success" onclick="nextWord()">الكلمة التالية ←</button>
+            </div>
+            <div class="feedback" id="wordFeedback"></div>
+        </div>
+
+        <div class="card">
+            <h2>📝 أكمل الكلمة</h2>
+            <p style="text-align: center; margin-bottom: 20px;">اكتب الحرف الناقص!</p>
+            
+            <div class="sentence-practice" id="completeWordExercise">
+                <div class="sentence" id="completeWordText">قـ _ ـمر</div>
+                <input type="text" id="completeWordInput" placeholder="اكتب الحرف الناقص" maxlength="1" onkeyup="checkCompleteWord()">
+            </div>
+            
+            <div style="text-align: center;">
+                <button class="btn btn-primary" onclick="nextCompleteWord()">التالي ←</button>
+            </div>
+            <div class="feedback" id="completeWordFeedback"></div>
+        </div>
+    </div>
+
+    <!-- SENTENCES SECTION -->
+    <div id="sentences" class="section">
+        <div class="card">
+            <h2>📜 كتابة الجمل</h2>
+            <p style="text-align: center; margin-bottom: 20px;">اقرأ الجملة ثم اكتبها!</p>
+            
+            <div class="sentence-practice">
+                <div class="sentence" id="sentenceText">أنا أحب القراءة</div>
+                <div class="writing-line">
+                    <textarea id="sentenceInput" placeholder="اكتب الجملة هنا..." oninput="checkSentence()"></textarea>
+                </div>
+            </div>
+            
+            <div style="text-align: center;">
+                <button class="btn btn-primary" onclick="checkSentence()">تحقق ✓</button>
+                <button class="btn btn-success" onclick="nextSentence()">الجملة التالية ←</button>
+            </div>
+            <div class="feedback" id="sentenceFeedback"></div>
+        </div>
+
+        <div class="card">
+            <h2>📖 اقرأ واكتب</h2>
+            <p style="text-align: center; margin-bottom: 20px;">اقرأ ثم اكتب بإبداع!</p>
+            
+            <div class="sentence-practice">
+                <div class="sentence">الشمس تشرق كل صباح</div>
+                <div class="writing-line">
+                    <textarea placeholder="اكتب هنا..."></textarea>
+                </div>
+            </div>
+            <div class="sentence-practice">
+                <div class="sentence">أنا أتعلم اللغة العربية</div>
+                <div class="writing-line">
+                    <textarea placeholder="اكتب هنا..."></textarea>
+                </div>
+            </div>
+            <div class="sentence-practice">
+                <div class="sentence">القراءة مفتاح المعرفة</div>
+                <div class="writing-line">
+                    <textarea placeholder="اكتب هنا..."></textarea>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- DRAW SECTION -->
+    <div id="draw" class="section">
+        <div class="card">
+            <h2>🎨 ارسم الحرف</h2>
+            <p style="text-align: center; margin-bottom: 20px;">ارسم الحرف باستخدام الماوس أو إصبعك!</p>
+            
+            <div style="text-align: center;">
+                <div class="trace-letter" id="drawLetter">ا</div>
+                <div style="font-size: 1.2em; color: #666;" id="drawLetterName">ألف</div>
+            </div>
+            
+            <canvas class="drawing-canvas" id="drawingCanvas" width="400" height="300"></canvas>
+            
+            <div class="canvas-controls">
+                <button class="btn btn-warning" onclick="clearCanvas()">مسح 🗑️</button>
+                <button class="btn btn-primary" onclick="nextDrawLetter()">الحرف التالي ←</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- QUIZ SECTION -->
+    <div id="quiz" class="section">
+        <div class="card">
+            <h2>📝 اختبار الكتابة العربية</h2>
+            <p style="text-align: center; margin-bottom: 20px;">اختبر ما تعلمته!</p>
+            
+            <div class="progress-bar">
+                <div class="progress-fill" id="quizProgress" style="width: 0%"></div>
+            </div>
+            <div class="score-display">
+                النتيجة: <span id="quizScore">0</span> / <span id="quizTotal">10</span>
+                <div class="stars" id="quizStars"></div>
+            </div>
+
+            <div id="quizQuestions">
+                <div class="quiz-question" data-answer="ب">
+                    <div class="question-text">١. ما هو الحرف الأول في كلمة "باب"؟</div>
+                    <div class="quiz-options">
+                        <button class="quiz-option" onclick="selectQuizAnswer(this, 'ب')">ب</button>
+                        <button class="quiz-option" onclick="selectQuizAnswer(this, 'ت')">ت</button>
+                        <button class="quiz-option" onclick="selectQuizAnswer(this, 'ث')">ث</button>
+                    </div>
+                </div>
+                <div class="quiz-question" data-answer="ش">
+                    <div class="question-text">٢. ما هو الحرف الأول في كلمة "شمس"؟</div>
+                    <div class="quiz-options">
+                        <button class="quiz-option" onclick="selectQuizAnswer(this, 'س')">س</button>
+                        <button class="quiz-option" onclick="selectQuizAnswer(this, 'ش')">ش</button>
+                        <button class="quiz-option" onclick="selectQuizAnswer(this, 'ص')">ص</button>
+                    </div>
+                </div>
+                <div class="quiz-question" data-answer="قمر">
+                    <div class="question-text">٣. اكتب كلمة: شيء يضيء في الليل 🌙</div>
+                    <div class="writing-line">
+                        <input type="text" class="quiz-input" placeholder="اكتب هنا..." style="width: 100%; padding: 10px; font-size: 1.5em; font-family: 'Amiri', serif; direction: rtl; border: 2px solid #ccc; border-radius: 10px;">
+                    </div>
+                </div>
+                <div class="quiz-question" data-answer="كتاب">
+                    <div class="question-text">٤. اكتب كلمة: شيء نقرأه 📚</div>
+                    <div class="writing-line">
+                        <input type="text" class="quiz-input" placeholder="اكتب هنا..." style="width: 100%; padding: 10px; font-size: 1.5em; font-family: 'Amiri', serif; direction: rtl; border: 2px solid #ccc; border-radius: 10px;">
+                    </div>
+                </div>
+                <div class="quiz-question" data-answer="م">
+                    <div class="question-text">٥. ما هو الحرف الأخير في كلمة "قلم"؟</div>
+                    <div class="quiz-options">
+                        <button class="quiz-option" onclick="selectQuizAnswer(this, 'ل')">ل</button>
+                        <button class="quiz-option" onclick="selectQuizAnswer(this, 'م')">م</button>
+                        <button class="quiz-option" onclick="selectQuizAnswer(this, 'ن')">ن</button>
+                    </div>
+                </div>
+                <div class="quiz-question" data-answer="تفاحة">
+                    <div class="question-text">٦. اكتب كلمة: فاكهة حمراء 🍎</div>
+                    <div class="writing-line">
+                        <input type="text" class="quiz-input" placeholder="اكتب هنا..." style="width: 100%; padding: 10px; font-size: 1.5em; font-family: 'Amiri', serif; direction: rtl; border: 2px solid #ccc; border-radius: 10px;">
+                    </div>
+                </div>
+                <div class="quiz-question" data-answer="ع">
+                    <div class="question-text">٧. ما هو الحرف الأول في كلمة "عنب"؟</div>
+                    <div class="quiz-options">
+                        <button class="quiz-option" onclick="selectQuizAnswer(this, 'غ')">غ</button>
+                        <button class="quiz-option" onclick="selectQuizAnswer(this, 'ع')">ع</button>
+                        <button class="quiz-option" onclick="selectQuizAnswer(this, 'خ')">خ</button>
+                    </div>
+                </div>
+                <div class="quiz-question" data-answer="ماء">
+                    <div class="question-text">٨. اكتب كلمة: نشربها عندما نكون عطشانين 💧</div>
+                    <div class="writing-line">
+                        <input type="text" class="quiz-input" placeholder="اكتب هنا..." style="width: 100%; padding: 10px; font-size: 1.5em; font-family: 'Amiri', serif; direction: rtl; border: 2px solid #ccc; border-radius: 10px;">
+                    </div>
+                </div>
+                <div class="quiz-question" data-answer="ر">
+                    <div class="question-text">٩. ما هو الحرف الأول في كلمة "وردة"؟</div>
+                    <div class="quiz-options">
+                        <button class="quiz-option" onclick="selectQuizAnswer(this, 'ز')">ز</button>
+                        <button class="quiz-option" onclick="selectQuizAnswer(this, 'ر')">ر</button>
+                        <button class="quiz-option" onclick="selectQuizAnswer(this, 'ذ')">ذ</button>
+                    </div>
+                </div>
+                <div class="quiz-question" data-answer="سمكة">
+                    <div class="question-text">١٠. اكتب كلمة: حيوان يعيش في الماء 🐟</div>
+                    <div class="writing-line">
+                        <input type="text" class="quiz-input" placeholder="اكتب هنا..." style="width: 100%; padding: 10px; font-size: 1.5em; font-family: 'Amiri', serif; direction: rtl; border: 2px solid #ccc; border-radius: 10px;">
+                    </div>
+                </div>
+            </div>
+
+            <div style="text-align: center; margin-top: 20px;">
+                <button class="btn btn-success" onclick="submitQuiz()">تسليم الاختبار ✓</button>
+                <button class="btn btn-warning" onclick="resetQuiz()">إعادة المحاولة ↻</button>
+            </div>
+            <div class="feedback" id="quizFeedback"></div>
+        </div>
+    </div>
+
+    <script>
+        // Arabic letters data
+        const arabicLetters = [
+            { letter: 'ا', name: 'ألف', forms: { isolated: 'ا', initial: 'ا', medial: 'ـا', final: 'ـا' } },
+            { letter: 'ب', name: 'باء', forms: { isolated: 'ب', initial: 'بـ', medial: 'ـبـ', final: 'ـب' } },
+            { letter: 'ت', name: 'تاء', forms: { isolated: 'ت', initial: 'تـ', medial: 'ـتـ', final: 'ـت' } },
+            { letter: 'ث', name: 'ثاء', forms: { isolated: 'ث', initial: 'ثـ', medial: 'ـثـ', final: 'ـث' } },
+            { letter: 'ج', name: 'جيم', forms: { isolated: 'ج', initial: 'جـ', medial: 'ـجـ', final: 'ـج' } },
+            { letter: 'ح', name: 'حاء', forms: { isolated: 'ح', initial: 'حـ', medial: 'ـحـ', final: 'ـح' } },
+            { letter: 'خ', name: 'خاء', forms: { isolated: 'خ', initial: 'خـ', medial: 'ـخـ', final: 'ـخ' } },
+            { letter: 'د', name: 'دال', forms: { isolated: 'د', initial: 'د', medial: 'ـد', final: 'ـد' } },
+            { letter: 'ذ', name: 'ذال', forms: { isolated: 'ذ', initial: 'ذ', medial: 'ـذ', final: 'ـذ' } },
+            { letter: 'ر', name: 'راء', forms: { isolated: 'ر', initial: 'ر', medial: 'ـر', final: 'ـر' } },
+            { letter: 'ز', name: 'زاي', forms: { isolated: 'ز', initial: 'ز', medial: 'ـز', final: 'ـز' } },
+            { letter: 'س', name: 'سين', forms: { isolated: 'س', initial: 'سـ', medial: 'ـسـ', final: 'ـس' } },
+            { letter: 'ش', name: 'شين', forms: { isolated: 'ش', initial: 'شـ', medial: 'ـشـ', final: 'ـش' } },
+            { letter: 'ص', name: 'صاد', forms: { isolated: 'ص', initial: 'صـ', medial: 'ـصـ', final: 'ـص' } },
+            { letter: 'ض', name: 'ضاد', forms: { isolated: 'ض', initial: 'ضـ', medial: 'ـضـ', final: 'ـض' } },
+            { letter: 'ط', name: 'طاء', forms: { isolated: 'ط', initial: 'طـ', medial: 'ـطـ', final: 'ـط' } },
+            { letter: 'ظ', name: 'ظاء', forms: { isolated: 'ظ', initial: 'ظـ', medial: 'ـظـ', final: 'ـظ' } },
+            { letter: 'ع', name: 'عين', forms: { isolated: 'ع', initial: 'عـ', medial: 'ـعـ', final: 'ـع' } },
+            { letter: 'غ', name: 'غين', forms: { isolated: 'غ', initial: 'غـ', medial: 'ـغـ', final: 'ـغ' } },
+            { letter: 'ف', name: 'فاء', forms: { isolated: 'ف', initial: 'فـ', medial: 'ـفـ', final: 'ـف' } },
+            { letter: 'ق', name: 'قاف', forms: { isolated: 'ق', initial: 'قـ', medial: 'ـقـ', final: 'ـق' } },
+            { letter: 'ك', name: 'كاف', forms: { isolated: 'ك', initial: 'كـ', medial: 'ـكـ', final: 'ـك' } },
+            { letter: 'ل', name: 'لام', forms: { isolated: 'ل', initial: 'لـ', medial: 'ـلـ', final: 'ـل' } },
+            { letter: 'م', name: 'ميم', forms: { isolated: 'م', initial: 'مـ', medial: 'ـمـ', final: 'ـم' } },
+            { letter: 'ن', name: 'نون', forms: { isolated: 'ن', initial: 'نـ', medial: 'ـنـ', final: 'ـن' } },
+            { letter: 'ه', name: 'هاء', forms: { isolated: 'ه', initial: 'هـ', medial: 'ـهـ', final: 'ـه' } },
+            { letter: 'و', name: 'واو', forms: { isolated: 'و', initial: 'و', medial: 'ـو', final: 'ـو' } },
+            { letter: 'ي', name: 'ياء', forms: { isolated: 'ي', initial: 'يـ', medial: 'ـيـ', final: 'ـي' } }
+        ];
+
+        // Words for practice
+        const practiceWords = [
+            { word: 'شمس', hint: '☀️ شيء يضيء في السماء', letters: ['ش', 'م', 'س'] },
+            { word: 'قمر', hint: '🌙 شيء يضيء في الليل', letters: ['ق', 'م', 'ر'] },
+            { word: 'كتاب', hint: '📚 شيء نقرأه', letters: ['ك', 'ت', 'ا', 'ب'] },
+            { word: 'قلم', hint: '✏️ نكتب به', letters: ['ق', 'ل', 'م'] },
+            { word: 'ماء', hint: '💧 نشربه', letters: ['م', 'ا', 'ء'] },
+            { word: 'تفاحة', hint: '🍎 فاكهة حمراء', letters: ['ت', 'ف', 'ا', 'ح', 'ة'] },
+            { word: 'وردة', hint: '🌹 زهرة جميلة', letters: ['و', 'ر', 'د', 'ة'] },
+            { word: 'سمكة', hint: '🐟 حيوان في الماء', letters: ['س', 'م', 'ك', 'ة'] },
+            { word: 'عنب', hint: '🍇 فاكهة بنفسجية', letters: ['ع', 'ن', 'ب'] },
+            { word: 'باب', hint: '🚪 ندخل من خلاله', letters: ['ب', 'ا', 'ب'] }
+        ];
+
+        // Complete word exercises
+        const completeWords = [
+            { display: 'قـ _ ـمر', answer: 'م', full: 'قمر' },
+            { display: 'شـ _ ـس', answer: 'م', full: 'شمس' },
+            { display: 'كـ _ ـاب', answer: 'ت', full: 'كتاب' },
+            { display: 'قـ _ ـم', answer: 'ل', full: 'قلم' },
+            { display: 'مـ _ ـء', answer: 'ا', full: 'ماء' },
+            { display: 'و _ دة', answer: 'ر', full: 'وردة' },
+            { display: 'عـ _ ـب', answer: 'ن', full: 'عنب' },
+            { display: 'بـ _ ـب', answer: 'ا', full: 'باب' }
+        ];
+
+        // Sentences for practice
+        const sentences = [
+            'أنا أحب القراءة',
+            'الشمس تشرق كل صباح',
+            'أنا أتعلم اللغة العربية',
+            'القراءة مفتاح المعرفة',
+            'أنا أحب المدرسة',
+            'الماء ضروري للحياة',
+            'أنا أكتب بالقلم',
+            'السماء زرقاء وجميلة'
+        ];
+
+        // Trace words
+        const traceWords = ['شمس', 'قمر', 'كتاب', 'قلم', 'ماء', 'تفاحة', 'وردة', 'سمكة', 'عنب', 'باب'];
+
+        // State variables
+        let currentLetterIndex = 0;
+        let currentTraceIndex = 0;
+        let currentWordIndex = 0;
+        let currentCompleteIndex = 0;
+        let currentSentenceIndex = 0;
+        let currentTraceWordIndex = 0;
+        let learnedLetters = new Set();
+        let selectedAnswer = '';
+
+        // Initialize
+        function init() {
+            renderLettersGrid();
+            updateFormDisplay();
+            setupWordBuilder();
+            setupCompleteWord();
+            setupDrawingCanvas();
+        }
+
+        // Navigation
+        function showSection(sectionId) {
+            document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+            document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+            document.getElementById(sectionId).classList.add('active');
+            event.target.classList.add('active');
+        }
+
+        // Letters Grid
+        function renderLettersGrid() {
+            const grid = document.getElementById('lettersGrid');
+            grid.innerHTML = '';
+            arabicLetters.forEach((item, index) => {
+                const card = document.createElement('div');
+                card.className = 'letter-card' + (learnedLetters.has(index) ? ' learned' : '');
+                card.innerHTML = `
+                    <div class="letter">${item.letter}</div>
+                    <div class="name">${item.name}</div>
+                `;
+                card.onclick = () => learnLetter(index, card);
+                grid.appendChild(card);
+            });
+        }
+
+        function learnLetter(index, card) {
+            learnedLetters.add(index);
+            card.classList.add('learned', 'bounce');
+            setTimeout(() => card.classList.remove('bounce'), 500);
+            
+            const count = learnedLetters.size;
+            if (count === arabicLetters.length) {
+                showFeedback('lettersFeedback', '🎉 ممتاز! لقد تعلمت جميع الحروف! أنت بطل يا يونس! ⭐⭐⭐', 'success');
+            } else {
+                showFeedback('lettersFeedback', `أحسنت! تعلمت ${count} من ${arabicLetters.length} حرف 💪`, 'success');
+            }
+        }
+
+        // Letter Forms
+        function updateFormDisplay() {
+            const letter = arabicLetters[currentLetterIndex];
+            document.getElementById('formIsolated').textContent = letter.forms.isolated;
+            document.getElementById('formInitial').textContent = letter.forms.initial;
+            document.getElementById('formMedial').textContent = letter.forms.medial;
+            document.getElementById('formFinal').textContent = letter.forms.final;
+        }
+
+        function nextLetterForm() {
+            currentLetterIndex = (currentLetterIndex + 1) % arabicLetters.length;
+            updateFormDisplay();
+        }
+
+        // Trace Letter
+        function checkTrace() {
+            const input = document.getElementById('traceInput');
+            const letter = arabicLetters[currentTraceIndex].letter;
+            
+            if (input.value.trim() === letter) {
+                input.classList.add('correct');
+                showFeedback('traceFeedback', '🎉 ممتاز! كتابة صحيحة! ⭐', 'success');
+            } else if (input.value.length > 0) {
+                input.classList.remove('correct');
+            }
+        }
+
+        function nextTraceLetter() {
+            currentTraceIndex = (currentTraceIndex + 1) % arabicLetters.length;
+            document.getElementById('traceLetter').textContent = arabicLetters[currentTraceIndex].letter;
+            document.getElementById('traceLetterName').textContent = arabicLetters[currentTraceIndex].name;
+            document.getElementById('traceInput').value = '';
+            document.getElementById('traceInput').classList.remove('correct');
+            hideFeedback('traceFeedback');
+        }
+
+        function resetTrace() {
+            document.getElementById('traceInput').value = '';
+            document.getElementById('traceInput').classList.remove('correct');
+            hideFeedback('traceFeedback');
+        }
+
+        // Trace Word
+        function checkTraceWord() {
+            const input = document.getElementById('traceWordInput');
+            const word = traceWords[currentTraceWordIndex];
+            
+            if (input.value.trim() === word) {
+                input.classList.add('correct');
+                showFeedback('traceWordFeedback', '🎉 ممتاز! كتابة صحيحة! ⭐', 'success');
+            } else if (input.value.length > 0) {
+                input.classList.remove('correct');
+            }
+        }
+
+        function nextTraceWord() {
+            currentTraceWordIndex = (currentTraceWordIndex + 1) % traceWords.length;
+            document.getElementById('traceWord').textContent = traceWords[currentTraceWordIndex];
+            document.getElementById('traceWordInput').value = '';
+            document.getElementById('traceWordInput').classList.remove('correct');
+            hideFeedback('traceWordFeedback');
+        }
+
+        // Word Builder
+        function setupWordBuilder() {
+            const word = practiceWords[currentWordIndex];
+            document.getElementById('targetWord').textContent = word.word;
+            document.getElementById('wordHint').textContent = word.hint;
+            document.getElementById('answerBox').textContent = '';
+            
+            const buttonsContainer = document.getElementById('letterButtons');
+            buttonsContainer.innerHTML = '';
+            
+            // Shuffle letters
+            const shuffled = [...word.letters].sort(() => Math.random() - 0.5);
+            shuffled.forEach(letter => {
+                const btn = document.createElement('button');
+                btn.className = 'letter-btn';
+                btn.textContent = letter;
+                btn.onclick = () => addLetterToAnswer(letter, btn);
+                buttonsContainer.appendChild(btn);
+            });
+        }
+
+        function addLetterToAnswer(letter, btn) {
+            const answerBox = document.getElementById('answerBox');
+            answerBox.textContent += letter;
+            btn.classList.add('used');
+        }
+
+        function checkWord() {
+            const answer = document.getElementById('answerBox').textContent;
+            const correct = practiceWords[currentWordIndex].word;
+            
+            if (answer === correct) {
+                showFeedback('wordFeedback', '🎉 ممتاز! كلمة صحيحة! ⭐', 'success');
+            } else {
+                showFeedback('wordFeedback', 'حاول مرة أخرى! 🤔', 'error');
+                document.getElementById('answerBox').classList.add('shake');
+                setTimeout(() => document.getElementById('answerBox').classList.remove('shake'), 500);
+            }
+        }
+
+        function resetWord() {
+            document.getElementById('answerBox').textContent = '';
+            document.querySelectorAll('.letter-btn').forEach(btn => btn.classList.remove('used'));
+            hideFeedback('wordFeedback');
+        }
+
+        function nextWord() {
+            currentWordIndex = (currentWordIndex + 1) % practiceWords.length;
+            setupWordBuilder();
+            hideFeedback('wordFeedback');
+        }
+
+        // Complete Word
+        function setupCompleteWord() {
+            const exercise = completeWords[currentCompleteIndex];
+            document.getElementById('completeWordText').textContent = exercise.display;
+            document.getElementById('completeWordInput').value = '';
+        }
+
+        function checkCompleteWord() {
+            const input = document.getElementById('completeWordInput');
+            const exercise = completeWords[currentCompleteIndex];
+            
+            if (input.value.trim() === exercise.answer) {
+                input.style.borderColor = '#4CAF50';
+                input.style.background = '#e8f5e9';
+                showFeedback('completeWordFeedback', `🎉 ممتاز! الكلمة هي "${exercise.full}" ⭐`, 'success');
+            } else if (input.value.length > 0) {
+                input.style.borderColor = '#f44336';
+                input.style.background = '#ffebee';
+            }
+        }
+
+        function nextCompleteWord() {
+            currentCompleteIndex = (currentCompleteIndex + 1) % completeWords.length;
+            setupCompleteWord();
+            hideFeedback('completeWordFeedback');
+        }
+
+        // Sentences
+        function checkSentence() {
+            const input = document.getElementById('sentenceInput');
+            const correct = sentences[currentSentenceIndex];
+            
+            if (input.value.trim() === correct) {
+                showFeedback('sentenceFeedback', '🎉 ممتاز! كتابة صحيحة! ⭐', 'success');
+            }
+        }
+
+        function nextSentence() {
+            currentSentenceIndex = (currentSentenceIndex + 1) % sentences.length;
+            document.getElementById('sentenceText').textContent = sentences[currentSentenceIndex];
+            document.getElementById('sentenceInput').value = '';
+            hideFeedback('sentenceFeedback');
+        }
+
+        // Drawing Canvas
+        function setupDrawingCanvas() {
+            const canvas = document.getElementById('drawingCanvas');
+            const ctx = canvas.getContext('2d');
+            let isDrawing = false;
+            
+            ctx.strokeStyle = '#1e3c72';
+            ctx.lineWidth = 4;
+            ctx.lineCap = 'round';
+            
+            function startDraw(e) {
+                isDrawing = true;
+                const pos = getPos(e);
+                ctx.beginPath();
+                ctx.moveTo(pos.x, pos.y);
+            }
+            
+            function draw(e) {
+                if (!isDrawing) return;
+                const pos = getPos(e);
+                ctx.lineTo(pos.x, pos.y);
+                ctx.stroke();
+            }
+            
+            function stopDraw() {
+                isDrawing = false;
+            }
+            
+            function getPos(e) {
+                const rect = canvas.getBoundingClientRect();
+                const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+                const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+                return {
+                    x: clientX - rect.left,
+                    y: clientY - rect.top
+                };
+            }
+            
+            canvas.addEventListener('mousedown', startDraw);
+            canvas.addEventListener('mousemove', draw);
+            canvas.addEventListener('mouseup', stopDraw);
+            canvas.addEventListener('mouseleave', stopDraw);
+            canvas.addEventListener('touchstart', startDraw);
+            canvas.addEventListener('touchmove', draw);
+            canvas.addEventListener('touchend', stopDraw);
+        }
+
+        function clearCanvas() {
+            const canvas = document.getElementById('drawingCanvas');
+            const ctx = canvas.getContext('2d');
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+        }
+
+        function nextDrawLetter() {
+            currentLetterIndex = (currentLetterIndex + 1) % arabicLetters.length;
+            document.getElementById('drawLetter').textContent = arabicLetters[currentLetterIndex].letter;
+            document.getElementById('drawLetterName').textContent = arabicLetters[currentLetterIndex].name;
+            clearCanvas();
+        }
+
+        // Quiz
+        function selectQuizAnswer(btn, answer) {
+            const question = btn.closest('.quiz-question');
+            const correct = question.dataset.answer;
+            
+            // Reset all options in this question
+            question.querySelectorAll('.quiz-option').forEach(opt => {
+                opt.classList.remove('correct', 'wrong');
+            });
+            
+            if (answer === correct) {
+                btn.classList.add('correct');
+            } else {
+                btn.classList.add('wrong');
+                // Show correct answer
+                question.querySelectorAll('.quiz-option').forEach(opt => {
+                    if (opt.textContent.trim() === correct) {
+                        opt.classList.add('correct');
+                    }
+                });
+            }
+            
+            updateQuizProgress();
+        }
+
+        function updateQuizProgress() {
+            const questions = document.querySelectorAll('.quiz-question');
+            let answered = 0;
+            questions.forEach(q => {
+                if (q.querySelector('.correct') || q.querySelector('.wrong')) {
+                    answered++;
+                }
+            });
+            document.getElementById('quizProgress').style.width = (answered / questions.length * 100) + '%';
+        }
+
+        function submitQuiz() {
+            const questions = document.querySelectorAll('.quiz-question');
+            let score = 0;
+            
+            questions.forEach(q => {
+                const correctAnswer = q.dataset.answer;
+                const correctBtn = q.querySelector('.quiz-option.correct');
+                const wrongBtn = q.querySelector('.quiz-option.wrong');
+                const textInput = q.querySelector('.quiz-input');
+                
+                if (correctBtn && !wrongBtn) {
+                    score++;
+                } else if (textInput && textInput.value.trim() === correctAnswer) {
+                    textInput.style.borderColor = '#4CAF50';
+                    textInput.style.background = '#e8f5e9';
+                    score++;
+                } else if (textInput) {
+                    textInput.style.borderColor = '#f44336';
+                    textInput.style.background = '#ffebee';
+                }
+            });
+            
+            document.getElementById('quizScore').textContent = score;
+            
+            let stars = '';
+            for (let i = 0; i < score; i++) stars += '⭐';
+            document.getElementById('quizStars').textContent = stars;
+            
+            if (score === 10) {
+                showFeedback('quizFeedback', '🎉🎉 درجة كاملة! أنت ممتاز يا يونس! 🌟🌟', 'success');
+            } else if (score >= 7) {
+                showFeedback('quizFeedback', `🎉 أحسنت! حصلت على ${score}/10! ⭐`, 'success');
+            } else {
+                showFeedback('quizFeedback', `حصلت على ${score}/10. واصل التعلم! 💪`, 'error');
+            }
+        }
+
+        function resetQuiz() {
+            document.querySelectorAll('.quiz-option').forEach(opt => {
+                opt.classList.remove('correct', 'wrong');
+            });
+            document.querySelectorAll('.quiz-input').forEach(input => {
+                input.value = '';
+                input.style.borderColor = '#ccc';
+                input.style.background = 'white';
+            });
+            document.getElementById('quizScore').textContent = '0';
+            document.getElementById('quizStars').textContent = '';
+            document.getElementById('quizProgress').style.width = '0%';
+            hideFeedback('quizFeedback');
+        }
+
+        // Feedback helpers
+        function showFeedback(id, message, type) {
+            const feedback = document.getElementById(id);
+            feedback.textContent = message;
+            feedback.className = 'feedback show ' + type;
+        }
+
+        function hideFeedback(id) {
+            const feedback = document.getElementById(id);
+            feedback.className = 'feedback';
+        }
+
+        // Initialize on load
+        init();
+    </script>
+</body>
+</html>
