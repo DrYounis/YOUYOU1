@@ -96,6 +96,7 @@ export default function Navbar() {
                     <Link href="/friends" style={navStyles.link}>👫 Friends</Link>
                     <Link href="/about" style={navStyles.link}>ℹ️ About</Link>
                     <Link href="/practice/naskh" style={{...navStyles.link, background: 'rgba(255,200,0,0.3)', border: '2px solid rgba(255,200,0,0.6)', fontWeight: '900'}}>🖋️ خط النسخ</Link>
+                    <Link href="/practice/english-notebook" style={{...navStyles.link, background: 'rgba(218, 55, 50, 0.3)', border: '2px solid rgba(218, 55, 50, 0.6)', fontWeight: '900'}}>📓 English HW</Link>
                 </div>
 
                 {/* Mobile Toggle */}
@@ -113,6 +114,7 @@ export default function Navbar() {
                     <Link href="/friends" onClick={toggleMenu} style={{ ...navStyles.link, fontSize: '1.6rem', textAlign: 'center' }}>👫 Friends</Link>
                     <Link href="/about" onClick={toggleMenu} style={{ ...navStyles.link, fontSize: '1.6rem', textAlign: 'center' }}>ℹ️ About</Link>
                     <Link href="/practice/naskh" onClick={toggleMenu} style={{ ...navStyles.link, fontSize: '1.6rem', textAlign: 'center', background: 'rgba(255,200,0,0.3)', border: '2px solid rgba(255,200,0,0.6)', fontWeight: '900' }}>🖋️ خط النسخ</Link>
+                    <Link href="/practice/english-notebook" onClick={toggleMenu} style={{ ...navStyles.link, fontSize: '1.6rem', textAlign: 'center', background: 'rgba(218, 55, 50, 0.3)', border: '2px solid rgba(218, 55, 50, 0.6)', fontWeight: '900' }}>📓 English HW</Link>
                 </div>
             </div>
             <style jsx>{`
