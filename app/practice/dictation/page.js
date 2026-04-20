@@ -4,9 +4,10 @@ import DocumentTracer from '../../../components/dictation/DocumentTracer';
 import DictationTest from '../../../components/dictation/DictationTest';
 import MatchingGame from '../../../components/dictation/MatchingGame';
 import VoicePractice from '../../../components/dictation/VoicePractice';
+import PenDictation from '../../../components/dictation/PenDictation';
 
 export default function InteractiveDictation() {
-    const [activeTab, setActiveTab] = useState('spell'); // spell, match, voice, document
+    const [activeTab, setActiveTab] = useState('pen'); // Defaulting to pen as it is the newest requested feature!
     
     // Document Tracer State
     const [isDrawingMode, setIsDrawingMode] = useState(false);
@@ -25,23 +26,28 @@ export default function InteractiveDictation() {
         }}>            
             {/* Header & Main Navigation */}
             <div style={{
-                padding: '2rem 1.5rem',
+                padding: '2rem 1.5rem 1rem 1.5rem',
                 background: 'white',
                 boxShadow: '0 2px 4px rgba(0,0,0,0.05)',
                 borderBottom: '4px solid #000'
             }}>
-                <div style={{ maxWidth: '1000px', margin: '0 auto' }}>
+                <div style={{ maxWidth: '1100px', margin: '0 auto' }}>
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem', flexWrap: 'wrap', gap: '1rem' }}>
                         <div>
                             <h1 style={{ fontSize: '2.5rem', fontWeight: '900', textTransform: 'uppercase', color: '#1D1D1D', margin: 0 }}>
                                 ⭐️ Dictation Hub
                             </h1>
-                            <p style={{ color: '#666', fontWeight: 'bold', margin: '0.5rem 0 0 0' }}>Learn, spell, and record!</p>
+                            <p style={{ color: '#666', fontWeight: 'bold', margin: '0.5rem 0 0 0' }}>Write, spell, and record!</p>
                         </div>
                     </div>
 
                     {/* Tab Navigation */}
-                    <div style={{ display: 'flex', gap: '1rem', overflowX: 'auto', paddingBottom: '0.5rem' }}>
+                    <div className="custom-scrollbar" style={{ display: 'flex', gap: '1rem', overflowX: 'auto', paddingBottom: '0.5rem' }}>
+                        <TabButton 
+                            active={activeTab === 'pen'} 
+                            onClick={() => setActiveTab('pen')}
+                            icon="✍️" label="Pen Dictation" color="#ef4444"
+                        />
                         <TabButton 
                             active={activeTab === 'spell'} 
                             onClick={() => setActiveTab('spell')}
@@ -60,7 +66,7 @@ export default function InteractiveDictation() {
                         <TabButton 
                             active={activeTab === 'document'} 
                             onClick={() => setActiveTab('document')}
-                            icon="📄" label="Print / Trace PDF" color="#f59e0b"
+                            icon="📄" label="Print PDF View" color="#f59e0b"
                         />
                     </div>
                 </div>
@@ -85,16 +91,17 @@ export default function InteractiveDictation() {
                 }}>
                     
                     {/* Render The Active Game Mode */}
+                    {activeTab === 'pen' && <PenDictation />}
+
                     {activeTab === 'spell' && <DictationTest />}
                     
                     {activeTab === 'match' && <MatchingGame />}
                     
                     {activeTab === 'voice' && <VoicePractice />}
 
-                    {/* Legacy iPad PDF Tracer (Hidden inside a tab now!) */}
+                    {/* Legacy iPad PDF Tracer */}
                     <div style={{ display: activeTab === 'document' ? 'block' : 'none', height: '75vh', position: 'relative' }}>
                         
-                        {/* PDF Toolbar specific to Document view */}
                         <div style={{ position: 'absolute', top: 10, right: 10, zIndex: 100, display: 'flex', gap: '0.5rem' }}>
                             <div style={{
                                 display: 'flex', background: '#e5e7eb', borderRadius: '50px', padding: '4px', border: '2px solid black'
@@ -102,8 +109,8 @@ export default function InteractiveDictation() {
                                 <button onClick={() => setIsDrawingMode(false)} style={getModeStyle(!isDrawingMode)}>✋ Scroll</button>
                                 <button onClick={() => setIsDrawingMode(true)} style={getModeStyle(isDrawingMode, '#55FFFF')}>✏️ Draw</button>
                             </div>
-                            <button onClick={handleUndo} style={getToolStyle('white')}>↩️</button>
-                            <button onClick={handleClear} style={getToolStyle('#FFDDDD')}>🗑️</button>
+                            <button onClick={handleUndo} style={getToolStyle('white')}>↩️ Undo</button>
+                            <button onClick={handleClear} style={getToolStyle('#FFDDDD')}>🗑️ Clear</button>
                         </div>
 
                         <DocumentTracer ref={tracerRef} isDrawingMode={isDrawingMode}>
@@ -127,6 +134,12 @@ export default function InteractiveDictation() {
 
                 </main>
             </div>
+            
+            <style jsx>{`
+                .custom-scrollbar::-webkit-scrollbar { height: 8px; }
+                .custom-scrollbar::-webkit-scrollbar-track { background: #f1f1f1; border-radius: 4px; }
+                .custom-scrollbar::-webkit-scrollbar-thumb { background: #c1c1c1; border-radius: 4px; }
+            `}</style>
         </div>
     );
 }
@@ -166,7 +179,7 @@ function getModeStyle(isActive, color = 'white') {
 
 function getToolStyle(background) {
     return {
-        padding: '0.5rem', fontSize: '1.1rem', fontWeight: 'bold', background, color: 'black',
+        padding: '0.5rem 1rem', fontSize: '1.1rem', fontWeight: 'bold', background, color: 'black',
         border: '2px solid black', borderRadius: '8px', cursor: 'pointer', boxShadow: '2px 2px 0px #000'
     };
 }
